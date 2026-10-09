@@ -1,0 +1,47 @@
+---
+interface Props {
+  pros: string[];
+  cons: string[];
+  serviceName?: string;
+}
+
+const { pros, cons, serviceName = '' } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+  <!-- Pros column -->
+  <div class="bg-white border border-[#E7E2DA] rounded p-5">
+    <h3 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-3 flex items-center gap-2">
+      <span class="w-5 h-5 rounded-full bg-emerald-50 text-[#0F5C4A] inline-flex items-center justify-center text-xs font-bold">
+        ✓
+      </span>
+      Reasons to Choose {serviceName}
+    </h3>
+    <ul class="space-y-2.5 text-sm text-[#1A1A1A]">
+      {pros.map((pro) => (
+        <li class="flex items-start gap-2.5">
+          <span class="text-[#0F5C4A] font-bold shrink-0 mt-0.5">✓</span>
+          <span class="leading-relaxed">{pro}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Cons column -->
+  <div class="bg-white border border-[#E7E2DA] rounded p-5">
+    <h3 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-3 flex items-center gap-2">
+      <span class="w-5 h-5 rounded-full bg-stone-100 text-stone-600 inline-flex items-center justify-center text-xs font-bold">
+        –
+      </span>
+      Potential Drawbacks
+    </h3>
+    <ul class="space-y-2.5 text-sm text-[#5C5C5C]">
+      {cons.map((con) => (
+        <li class="flex items-start gap-2.5">
+          <span class="text-stone-400 font-bold shrink-0 mt-0.5">–</span>
+          <span class="leading-relaxed">{con}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>

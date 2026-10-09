@@ -1,0 +1,6 @@
+{
+  "name": "LiveTVStreaming.services – Cord-Cutter's Guide",
+  "description": "Independent editorial comparison and programmatic channel finder for US live TV streaming services.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

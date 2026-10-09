@@ -1,0 +1,38 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  href: string;
+  serviceName: string;
+  shortName?: string;
+  promoText?: string | null;
+  class?: string;
+  variant?: 'primary' | 'secondary' | 'warm' | 'highlight' | 'link';
+  size?: 'md' | 'sm';
+  fullWidth?: boolean;
+}
+
+const {
+  href,
+  serviceName,
+  shortName,
+  class: className = '',
+  variant = 'primary',
+  size = 'md',
+  fullWidth = false
+} = Astro.props;
+
+const labelName = shortName || serviceName;
+const resolvedVariant = variant === 'warm' ? 'highlight' : variant;
+---
+
+<Button
+  href={href}
+  variant={resolvedVariant}
+  size={size}
+  fullWidth={fullWidth}
+  class={className}
+  ariaLabel={`Get ${labelName} official subscription`}
+>
+  <span>Get {labelName}</span>
+</Button>

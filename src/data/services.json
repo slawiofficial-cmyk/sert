@@ -1,0 +1,241 @@
+{
+  "lastVerified": "2026-10-01",
+  "_disclaimer": "Placeholder data for editorial testing; verify all promotional pricing and lineups prior to production deployment.",
+  "services": [
+    {
+      "id": "youtube-tv",
+      "name": "YouTube TV",
+      "shortName": "YouTube TV",
+      "slug": "youtube-tv",
+      "logo": "/logos/youtube-tv.svg",
+      "monthlyPrice": 72.99,
+      "promoPrice": 52.99,
+      "promoDescription": "for first 3 months",
+      "freeTrialDays": 5,
+      "simultaneousStreams": 3,
+      "dvrStorage": "Unlimited (9 months retention)",
+      "supports4K": true,
+      "contractRequired": false,
+      "channelCount": 105,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "lg-tv", "vizio", "xbox", "playstation", "ios", "android"],
+      "pros": [
+        "Best-in-class cloud DVR with 9-month retention and unlimited profiles",
+        "Includes every major local affiliate (ABC, CBS, FOX, NBC) in 99% of markets",
+        "Key sports essentials including ESPN, FS1, TNT, TBS, and NFL Network",
+        "Fastest channel-switching interface and multi-view feature"
+      ],
+      "cons": [
+        "Regional Sports Networks (RSNs) like Bally Sports / YES are excluded",
+        "4K Plus tier is an expensive $9.99/mo add-on",
+        "No MLB Network or NHL Network out of the box"
+      ],
+      "bestFor": "Best overall for most cord-cutters & NFL fans",
+      "affiliateUrl": "#AFFILIATE_YOUTUBETV",
+      "editorialRating": 4.8,
+      "summary": "YouTube TV remains our benchmark recommendation for cord-cutters who want a reliable, cable-like bundle without contracts, hardware fees, or DVR restrictions.",
+      "datePublished": "2026-01-15",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "hulu-live",
+      "name": "Hulu + Live TV",
+      "shortName": "Hulu Live",
+      "slug": "hulu-live",
+      "logo": "/logos/hulu-live.svg",
+      "monthlyPrice": 76.99,
+      "promoPrice": 59.99,
+      "promoDescription": "for first 3 months",
+      "freeTrialDays": 3,
+      "simultaneousStreams": 2,
+      "dvrStorage": "Unlimited (9 months retention)",
+      "supports4K": false,
+      "contractRequired": false,
+      "channelCount": 95,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "lg-tv", "vizio", "xbox", "playstation", "ios", "android"],
+      "pros": [
+        "Includes Disney+ and ESPN+ bundled directly into the base rate",
+        "Complete local channel broadcast coverage in virtually all DMAs",
+        "Access to Hulu's massive on-demand originals catalog"
+      ],
+      "cons": [
+        "Base stream cap is strictly 2 simultaneous streams (upgrade costs $9.99/mo)",
+        "Clunky guide interface compared to YouTube TV",
+        "Missing several regional sports networks"
+      ],
+      "bestFor": "Best value bundle for Disney+ & ESPN+ subscribers",
+      "affiliateUrl": "#AFFILIATE_HULULIVE",
+      "editorialRating": 4.6,
+      "summary": "If you already pay for Disney+ and ESPN+, Hulu + Live TV effectively discounts its live channel lineup by consolidating three indispensable subscriptions.",
+      "datePublished": "2026-01-20",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "sling-tv",
+      "name": "Sling TV",
+      "shortName": "Sling TV",
+      "slug": "sling-tv",
+      "logo": "/logos/sling-tv.svg",
+      "monthlyPrice": 40.00,
+      "promoPrice": 20.00,
+      "promoDescription": "for your first month",
+      "freeTrialDays": 0,
+      "simultaneousStreams": 3,
+      "dvrStorage": "50 Hours (Upgrade to 200 hours for $5/mo)",
+      "supports4K": false,
+      "contractRequired": false,
+      "channelCount": 42,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "lg-tv", "vizio", "xbox", "ios", "android"],
+      "pros": [
+        "Cheapest mainstream way to watch ESPN (Orange) or FS1/Fox (Blue)",
+        "A la carte add-on packs allow surgical channel customization",
+        "Frequent half-off first-month promotions"
+      ],
+      "cons": [
+        "Split Orange vs. Blue channel tiers force compromise or a $55/mo combo",
+        "Local channels (ABC/CBS/NBC) are absent or severely restricted in most markets",
+        "Only 50 hours of cloud DVR included by default"
+      ],
+      "bestFor": "Best budget pick for targeted channel viewing",
+      "affiliateUrl": "#AFFILIATE_SLINGTV",
+      "editorialRating": 4.1,
+      "summary": "Sling TV is the undisputed budget leader if you can tolerate its bifurcated Orange vs. Blue plans and rely on an over-the-air HD antenna for your local network stations.",
+      "datePublished": "2026-02-01",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "fubo",
+      "name": "Fubo",
+      "shortName": "Fubo",
+      "slug": "fubo",
+      "logo": "/logos/fubo.svg",
+      "monthlyPrice": 79.99,
+      "promoPrice": 59.99,
+      "promoDescription": "for first month",
+      "freeTrialDays": 7,
+      "simultaneousStreams": 10,
+      "dvrStorage": "Unlimited (cloud)",
+      "supports4K": true,
+      "contractRequired": false,
+      "channelCount": 185,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "lg-tv", "vizio", "xbox", "ios", "android"],
+      "pros": [
+        "Massive selection of Regional Sports Networks (Bally, Marquee, Altitude, etc.)",
+        "1,000+ hours or unlimited DVR storage across multiple profiles",
+        "10 home streams simultaneously out of the box",
+        "Native 4K live sports events included on select plans"
+      ],
+      "cons": [
+        "Mandatory regional sports fee (up to $14.99/mo) applied in most areas",
+        "Warner Bros. Discovery channels (TNT, TBS, TruTV) are missing",
+        "Higher out-of-pocket cost than YouTube TV"
+      ],
+      "bestFor": "Best for hard-core sports fans & regional home team broadcasts",
+      "affiliateUrl": "#AFFILIATE_FUBO",
+      "editorialRating": 4.4,
+      "summary": "Fubo is built from the turf up for sports fans who need their hometown regional network, though the absence of TNT/TBS is a real drawback for NBA playoff season.",
+      "datePublished": "2026-02-10",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "directv-stream",
+      "name": "DirecTV Stream",
+      "shortName": "DirecTV",
+      "slug": "directv-stream",
+      "logo": "/logos/directv-stream.svg",
+      "monthlyPrice": 79.99,
+      "promoPrice": 69.99,
+      "promoDescription": "for first 2 months",
+      "freeTrialDays": 5,
+      "simultaneousStreams": 20,
+      "dvrStorage": "Unlimited (cloud)",
+      "supports4K": true,
+      "contractRequired": false,
+      "channelCount": 90,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "lg-tv", "vizio", "ios", "android"],
+      "pros": [
+        "Choice tier ($108.99/mo) has the most comprehensive RSN lineup of any service",
+        "Includes YES Network, NESN, MASN, and Marquee",
+        "Unlimited in-home streams allows genuine whole-household usage",
+        "Traditional cable remote experience with numerical channel surfing (proprietary dongle)"
+      ],
+      "cons": [
+        "Premium tier pricing is substantially higher than digital-native competitors",
+        "Base Entertainment tier lacks regional sports",
+        "Interface feels slightly antiquated compared to YouTube TV"
+      ],
+      "bestFor": "Best cable-replacement for regional sports & baseball enthusiasts",
+      "affiliateUrl": "#AFFILIATE_DIRECTVSTREAM",
+      "editorialRating": 4.3,
+      "summary": "DirecTV Stream is the closest thing to traditional cable in streaming form. If you must have YES Network for the Yankees or NESN for the Red Sox, it is often your only legal streaming avenue.",
+      "datePublished": "2026-02-15",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "philo",
+      "name": "Philo",
+      "shortName": "Philo",
+      "slug": "philo",
+      "logo": "/logos/philo.svg",
+      "monthlyPrice": 28.00,
+      "promoPrice": null,
+      "promoDescription": null,
+      "freeTrialDays": 7,
+      "simultaneousStreams": 3,
+      "dvrStorage": "Unlimited (1 year retention)",
+      "supports4K": false,
+      "contractRequired": false,
+      "channelCount": 70,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "vizio", "ios", "android"],
+      "pros": [
+        "Extremely affordable at just $28/month",
+        "Generous 1-year unlimited DVR retention window",
+        "Great collection of entertainment, lifestyle, and reality networks (HGTV, Food, Hallmark)",
+        "AMC+ on-demand catalog included at no extra charge"
+      ],
+      "cons": [
+        "Zero sports networks (no ESPN, FS1, regional networks)",
+        "Zero broadcast locals (no ABC, CBS, NBC, FOX)",
+        "No mainstream news networks (CNN, Fox News, MSNBC)"
+      ],
+      "bestFor": "Best ultra-cheap bundle for entertainment & lifestyle lovers",
+      "affiliateUrl": "#AFFILIATE_PHILO",
+      "editorialRating": 4.5,
+      "summary": "Philo keeps its subscription rock-bottom by purposefully cutting expensive sports and local retransmission fees. For lifestyle, reality, and drama lovers, it is unmatched value.",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-10-01"
+    },
+    {
+      "id": "frndly-tv",
+      "name": "Frndly TV",
+      "shortName": "Frndly TV",
+      "slug": "frndly-tv",
+      "logo": "/logos/frndly-tv.svg",
+      "monthlyPrice": 7.99,
+      "promoPrice": null,
+      "promoDescription": null,
+      "freeTrialDays": 7,
+      "simultaneousStreams": 2,
+      "dvrStorage": "Unlimited (3-month retention on Classic tier)",
+      "supports4K": false,
+      "contractRequired": false,
+      "channelCount": 40,
+      "supportedDevices": ["roku", "fire-tv", "apple-tv", "google-tv", "samsung-tv", "vizio", "ios", "android"],
+      "pros": [
+        "The cheapest live TV package on the market starting at under $8/mo",
+        "All Hallmark channels, Lifetime, Great American Family, The Weather Channel",
+        "Super clean, family-friendly interface"
+      ],
+      "cons": [
+        "Base $7.99 plan is Standard Definition (SD) with no DVR",
+        "Zero sports or national political news",
+        "Smallest channel library of any tracked provider"
+      ],
+      "bestFor": "Best bargain for Hallmark, Lifetime & feel-good classics",
+      "affiliateUrl": "#AFFILIATE_FRNDLYTV",
+      "editorialRating": 4.0,
+      "summary": "Frndly TV is a specialty micro-bundle created specifically for viewers who just want Hallmark, MeTV, and classic family television without paying for bloated sports lineups.",
+      "datePublished": "2026-03-10",
+      "dateModified": "2026-10-01"
+    }
+  ]
+}

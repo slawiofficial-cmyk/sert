@@ -1,0 +1,543 @@
+---
+import servicesData from '../data/services.json';
+import channelsData from '../data/channels.json';
+
+interface Props {
+  initialSelectedChannels?: string[];
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  initialSelectedChannels = [],
+  title = 'Live TV Channel Finder & Plan Calculator',
+  subtitle = 'Select the channels you actually watch. We calculate the exact service package that carries them at the lowest monthly price.'
+} = Astro.props;
+
+const services = servicesData.services;
+const channels = channelsData.channels;
+
+const presetBundles = [
+  { label: 'Sports Fan', ids: 'espn,espn2,fs1,tnt,nfl-network,usa-network' },
+  { label: 'News Junkie', ids: 'cnn,fox-news,msnbc,cnbc,bloomberg' },
+  { label: 'Family & Kids', ids: 'disney-channel,nickelodeon,cartoon-network,animal-planet,discovery-channel' },
+  { label: 'Cord-Cutter Essentials', ids: 'local-abc,local-cbs,local-nbc,local-fox,espn,hgtv,food-network' }
+];
+
+const categories = [
+  { label: 'All Channels', value: 'all' },
+  { label: 'Sports', value: 'sports' },
+  { label: 'News', value: 'news' },
+  { label: 'Entertainment', value: 'entertainment' },
+  { label: 'Lifestyle', value: 'lifestyle' },
+  { label: 'Kids & Family', value: 'kids' },
+  { label: 'Local Stations', value: 'local' }
+];
+---
+
+<div
+  id="finder"
+  class="channel-finder bg-white border border-[#E7E2DA] rounded p-5 sm:p-7 my-8 shadow-xs"
+  data-initial={initialSelectedChannels.join(',')}
+>
+  <!-- ARIA Live Region for Screen Readers -->
+  <div id="cf-aria-live" aria-live="polite" class="sr-only">
+    Channel finder loaded. Select channels to calculate provider coverage.
+  </div>
+
+  <!-- Tool Header -->
+  <div class="mb-6">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="w-2 h-2 rounded-full bg-[#0F5C4A]"></span>
+      <span class="text-xs font-semibold uppercase tracking-wider text-[#0F5C4A]">
+        Interactive Channel Tool
+      </span>
+    </div>
+    <h2 class="font-editorial text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+      {title}
+    </h2>
+    {subtitle && (
+      <p class="text-sm text-[#5C5C5C] mt-1.5 max-w-3xl leading-relaxed">
+        {subtitle}
+      </p>
+    )}
+  </div>
+
+  <!-- Suggested Starter Bundles -->
+  <div class="mb-5 pb-5 border-b border-[#E7E2DA]">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-medium text-[#5C5C5C]">
+        Quick Starter Bundles:
+      </span>
+      {presetBundles.map((bundle) => (
+        <button
+          type="button"
+          data-bundle-ids={bundle.ids}
+          class="cf-bundle-btn text-xs px-2.5 py-1 rounded bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#0F5C4A] hover:text-[#0F5C4A] text-[#1A1A1A] transition-colors"
+        >
+          + {bundle.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Search & Category Filters -->
+  <div class="space-y-3 mb-6">
+    <div class="relative flex-1">
+      <input
+        type="text"
+        id="cf-search-input"
+        placeholder="Search channels (e.g. ESPN, TNT, CNN, Hallmark)..."
+        class="w-full pl-9 pr-8 py-2.5 bg-[#FAF8F5] border border-[#E7E2DA] rounded text-sm text-[#1A1A1A] placeholder-stone-400 focus:bg-white focus:outline-2 focus:outline-[#0F5C4A]"
+        aria-label="Search channel names"
+      />
+      <svg
+        class="w-4 h-4 text-stone-400 absolute left-3 top-3.5 pointer-events-none"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <button
+        type="button"
+        id="cf-search-clear"
+        class="hidden absolute right-2.5 top-2.5 text-stone-400 hover:text-stone-700 text-xs px-1.5 py-0.5 rounded"
+        aria-label="Clear channel search"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Channel categories">
+      {categories.map((cat, idx) => (
+        <button
+          type="button"
+          data-category={cat.value}
+          role="tab"
+          aria-selected={idx === 0 ? "true" : "false"}
+          class={`cf-cat-tab text-xs px-3 py-1.5 rounded font-medium transition-colors ${
+            idx === 0
+              ? 'bg-[#0F5C4A] text-white shadow-2xs active-cat'
+              : 'bg-[#FAF8F5] text-[#5C5C5C] hover:text-[#1A1A1A] border border-[#E7E2DA]'
+          }`}
+        >
+          {cat.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Channel Picker Grid -->
+  <div class="mb-6">
+    <div class="flex items-center justify-between mb-2 text-xs text-[#5C5C5C]">
+      <span>Click channels to toggle selection:</span>
+      <span id="cf-selection-count" class="font-semibold text-[#0F5C4A]">
+        0 channels selected
+      </span>
+    </div>
+
+    <div
+      id="cf-channels-grid"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 max-h-56 overflow-y-auto p-1 border border-[#E7E2DA] rounded bg-[#FAF8F5]"
+    >
+      {channels.map((ch) => (
+        <button
+          type="button"
+          data-channel-id={ch.id}
+          data-channel-name={ch.name}
+          data-channel-category={ch.category}
+          data-available-on={ch.availableOn.join(',')}
+          aria-pressed="false"
+          class="cf-channel-chip p-2 text-left rounded text-xs transition-all border flex items-center justify-between gap-1 min-h-[42px] select-none bg-white border-[#E7E2DA] text-[#1A1A1A] hover:border-stone-400"
+        >
+          <span class="truncate">{ch.name}</span>
+          <span class="cf-chip-icon text-xs shrink-0 font-bold text-stone-400">+</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Selected Lineup Summary Bar -->
+  <div id="cf-summary-bar" class="hidden mb-8 p-3.5 bg-stone-50 border border-[#E7E2DA] rounded">
+    <div class="flex items-center justify-between gap-2 mb-2">
+      <span class="text-xs font-semibold text-[#1A1A1A]">
+        Your Selected Lineup (<span id="cf-summary-total">0</span>):
+      </span>
+      <button
+        type="button"
+        id="cf-clear-all-btn"
+        class="text-xs text-[#C2410C] hover:underline font-medium"
+      >
+        Clear All Channels
+      </button>
+    </div>
+    <div id="cf-selected-tags" class="flex flex-wrap gap-1.5">
+      <!-- Dynamic tag chips inserted here -->
+    </div>
+  </div>
+
+  <!-- Calculated Coverage Results -->
+  <div class="space-y-4">
+    <div class="flex items-baseline justify-between border-b border-[#E7E2DA] pb-2">
+      <h3 id="cf-results-title" class="font-editorial text-lg font-bold text-[#1A1A1A]">
+        Live TV Providers Ranked by Coverage & Price
+      </h3>
+      <span class="text-xs text-[#5C5C5C]">
+        Full coverage first, then lowest price
+      </span>
+    </div>
+
+    <!-- Results Cards Container -->
+    <div id="cf-results-list" class="space-y-3">
+      <!-- Dynamic service cards rendered by client script -->
+    </div>
+  </div>
+</div>
+
+<!-- Embedded Data Payload for Client-Side Script Island -->
+<script id="cf-data" type="application/json" set:html={JSON.stringify({ services, channels })} />
+
+<script>
+  // Vanilla TypeScript Island for ChannelFinder
+  (() => {
+    const dataEl = document.getElementById('cf-data');
+    if (!dataEl) return;
+    const { services, channels } = JSON.parse(dataEl.textContent || '{}');
+
+    const finderEl = document.getElementById('finder');
+    const searchInput = document.getElementById('cf-search-input') as HTMLInputElement | null;
+    const searchClear = document.getElementById('cf-search-clear');
+    const catTabs = document.querySelectorAll('.cf-cat-tab');
+    const channelChips = document.querySelectorAll('.cf-channel-chip');
+    const summaryBar = document.getElementById('cf-summary-bar');
+    const summaryTotal = document.getElementById('cf-summary-total');
+    const selectedTags = document.getElementById('cf-selected-tags');
+    const clearAllBtn = document.getElementById('cf-clear-all-btn');
+    const resultsList = document.getElementById('cf-results-list');
+    const selectionCount = document.getElementById('cf-selection-count');
+    const ariaLive = document.getElementById('cf-aria-live');
+    const resultsTitle = document.getElementById('cf-results-title');
+
+    // Parse state: Check URL ?ch= first, fallback to initial attribute
+    let selectedChannelIds: string[] = [];
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryCh = urlParams.get('ch');
+    if (queryCh) {
+      selectedChannelIds = queryCh.split(',').filter(Boolean);
+    } else if (finderEl?.dataset.initial) {
+      selectedChannelIds = finderEl.dataset.initial.split(',').filter(Boolean);
+    }
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function updateUrl() {
+      const url = new URL(window.location.href);
+      if (selectedChannelIds.length > 0) {
+        url.searchParams.set('ch', selectedChannelIds.join(','));
+      } else {
+        url.searchParams.delete('ch');
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    function renderSelectionState() {
+      // Update channel chips visually
+      channelChips.forEach((chip) => {
+        const btn = chip as HTMLButtonElement;
+        const id = btn.dataset.channelId || '';
+        const isSelected = selectedChannelIds.includes(id);
+        const icon = btn.querySelector('.cf-chip-icon');
+
+        btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+        if (isSelected) {
+          btn.className = 'cf-channel-chip p-2 text-left rounded text-xs transition-all border flex items-center justify-between gap-1 min-h-[42px] select-none bg-[#0F5C4A] border-[#0F5C4A] text-white font-medium shadow-2xs';
+          if (icon) {
+            icon.textContent = '✓';
+            icon.className = 'cf-chip-icon text-xs shrink-0 font-bold text-white';
+          }
+        } else {
+          btn.className = 'cf-channel-chip p-2 text-left rounded text-xs transition-all border flex items-center justify-between gap-1 min-h-[42px] select-none bg-white border-[#E7E2DA] text-[#1A1A1A] hover:border-stone-400';
+          if (icon) {
+            icon.textContent = '+';
+            icon.className = 'cf-chip-icon text-xs shrink-0 font-bold text-stone-400';
+          }
+        }
+      });
+
+      // Update count text
+      if (selectionCount) {
+        selectionCount.textContent = `${selectedChannelIds.length} channel${selectedChannelIds.length === 1 ? '' : 's'} selected`;
+      }
+
+      // Update summary bar
+      if (summaryBar && summaryTotal && selectedTags) {
+        if (selectedChannelIds.length > 0) {
+          summaryBar.classList.remove('hidden');
+          summaryTotal.textContent = String(selectedChannelIds.length);
+          selectedTags.innerHTML = '';
+
+          selectedChannelIds.forEach((id) => {
+            const ch = channels.find((c: any) => c.id === id);
+            if (!ch) return;
+            const tag = document.createElement('span');
+            tag.className = 'inline-flex items-center gap-1.5 px-2 py-1 bg-white border border-[#E7E2DA] rounded text-xs text-[#1A1A1A]';
+            tag.innerHTML = `<span>${ch.name}</span><button type="button" data-remove-id="${id}" class="text-stone-400 hover:text-[#C2410C] font-bold text-xs" aria-label="Remove ${ch.name}">×</button>`;
+            selectedTags.appendChild(tag);
+          });
+        } else {
+          summaryBar.classList.add('hidden');
+        }
+      }
+
+      // Calculate coverage and sort services
+      const selectedChannels = selectedChannelIds
+        .map((id) => channels.find((c: any) => c.id === id))
+        .filter(Boolean);
+
+      const computedServices = services.map((svc: any) => {
+        const effectivePrice = svc.promoPrice ?? svc.monthlyPrice;
+        const covered = selectedChannels.filter((c: any) => c.availableOn.includes(svc.id));
+        const missing = selectedChannels.filter((c: any) => !c.availableOn.includes(svc.id));
+        const coveredCount = covered.length;
+        const total = selectedChannels.length;
+        const percentage = total > 0 ? Math.round((coveredCount / total) * 100) : 0;
+        const pricePerSelected = coveredCount > 0 ? (effectivePrice / coveredCount).toFixed(2) : '0.00';
+        const isFull = total > 0 && coveredCount === total;
+
+        return {
+          svc,
+          effectivePrice,
+          covered,
+          missing,
+          coveredCount,
+          total,
+          percentage,
+          pricePerSelected,
+          isFull
+        };
+      });
+
+      // Sorting: full coverage first, then lowest effective price, then coverage count desc
+      computedServices.sort((a: any, b: any) => {
+        if (a.isFull && !b.isFull) return -1;
+        if (!a.isFull && b.isFull) return 1;
+        if (a.isFull && b.isFull) return a.effectivePrice - b.effectivePrice;
+        if (b.coveredCount !== a.coveredCount) return b.coveredCount - a.coveredCount;
+        return a.effectivePrice - b.effectivePrice;
+      });
+
+      // Mark best match
+      const hasAnySelection = selectedChannelIds.length > 0;
+      let bestMatchId = '';
+      if (hasAnySelection && computedServices.length > 0 && computedServices[0].coveredCount > 0) {
+        bestMatchId = computedServices[0].svc.id;
+      }
+
+      // Update section title
+      if (resultsTitle) {
+        resultsTitle.textContent = hasAnySelection
+          ? `Matching Live TV Services for Your Lineup (${selectedChannelIds.length} Channels)`
+          : 'All Services Ranked (Select channels above to calculate exact coverage)';
+      }
+
+      // Render results list HTML
+      if (resultsList) {
+        resultsList.innerHTML = computedServices.map((res: any) => {
+          const isBest = res.svc.id === bestMatchId;
+          const isFull = res.isFull;
+
+          return `
+            <div class="bg-white border rounded p-4 sm:p-5 transition-all ${
+              isBest ? 'border-[#C2410C] ring-1 ring-[#C2410C]/20 shadow-xs' : 'border-[#E7E2DA] hover:border-stone-400'
+            }">
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2.5">
+                    <span class="font-editorial text-xl font-bold text-[#1A1A1A]">
+                      ${res.svc.name}
+                    </span>
+                    ${isBest ? `<span class="text-[11px] font-bold uppercase tracking-wider text-white bg-[#C2410C] px-2 py-0.5 rounded">Best Match</span>` : ''}
+                    ${isFull && !isBest ? `<span class="text-[11px] font-semibold text-[#0F5C4A] bg-[#0F5C4A]/10 px-2 py-0.5 rounded">100% Match</span>` : ''}
+                  </div>
+                  <p class="text-xs text-[#5C5C5C]">${res.svc.bestFor}</p>
+
+                  ${hasAnySelection ? `
+                    <div class="pt-2">
+                      <div class="flex items-center gap-3 text-xs">
+                        <span class="font-semibold text-[#1A1A1A] tabular-nums">
+                          ${res.coveredCount} of ${res.total} channels (${res.percentage}%)
+                        </span>
+                        <span class="text-stone-300">·</span>
+                        <span class="text-[#5C5C5C] tabular-nums">
+                          $${res.pricePerSelected} / covered channel
+                        </span>
+                      </div>
+                      <div class="w-full bg-stone-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
+                        <div class="h-full transition-all duration-300 ${
+                          res.isFull ? 'bg-[#0F5C4A]' : res.percentage >= 70 ? 'bg-amber-600' : 'bg-stone-400'
+                        }" style="width: ${res.percentage}%;"></div>
+                      </div>
+                    </div>
+                  ` : ''}
+                </div>
+
+                <div class="flex items-center justify-between lg:justify-end gap-6 shrink-0 border-t lg:border-t-0 pt-3 lg:pt-0 border-stone-100">
+                  <div class="text-left lg:text-right">
+                    <div class="flex items-baseline gap-1 lg:justify-end">
+                      <span class="font-editorial text-2xl font-bold text-[#1A1A1A] tabular-nums">
+                        $${res.effectivePrice.toFixed(2)}
+                      </span>
+                      <span class="text-xs text-[#5C5C5C]">/mo</span>
+                    </div>
+                    <span class="text-[11px] text-[#5C5C5C] block">
+                      ${res.svc.freeTrialDays > 0 ? `${res.svc.freeTrialDays}-day free trial` : 'No contract'}
+                    </span>
+                  </div>
+
+                  <a
+                    href="${res.svc.affiliateUrl}"
+                    target="_blank"
+                    rel="sponsored nofollow noopener"
+                    class="btn-base btn-md ${
+                      isBest ? 'btn-highlight' : 'btn-primary'
+                    }"
+                    aria-label="Get ${res.svc.shortName || res.svc.name} subscription"
+                  >
+                    <span>Get ${res.svc.shortName || res.svc.name}</span>
+                    <svg class="btn-arrow-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 8h10M9 4l4 4-4 4" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              ${hasAnySelection && res.missing.length > 0 ? `
+                <div class="mt-3 pt-3 border-t border-[#E7E2DA]/80 text-xs text-[#5C5C5C] flex flex-wrap items-center gap-1.5">
+                  <span class="font-medium text-stone-500">Missing from this plan:</span>
+                  ${res.missing.map((mc: any) => `<span class="text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded text-[11px]">${mc.name}</span>`).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Update ARIA Live announcement
+      if (ariaLive) {
+        if (!hasAnySelection) {
+          ariaLive.textContent = 'No channels selected. Showing all available live streaming services.';
+        } else {
+          const top = computedServices[0];
+          ariaLive.textContent = `Calculated coverage for ${selectedChannelIds.length} channels. Best match is ${top.svc.name} with ${top.percentage}% coverage at $${top.effectivePrice.toFixed(2)} per month.`;
+        }
+      }
+
+      updateUrl();
+    }
+
+    // Filter channels in chip grid
+    function filterChips() {
+      const query = searchQuery.trim().toLowerCase();
+      channelChips.forEach((chip) => {
+        const btn = chip as HTMLButtonElement;
+        const name = (btn.dataset.channelName || '').toLowerCase();
+        const cat = btn.dataset.channelCategory || '';
+
+        const matchesCat = currentCategory === 'all' || cat === currentCategory;
+        const matchesQuery = query === '' || name.includes(query);
+
+        if (matchesCat && matchesQuery) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    }
+
+    // Bind chip clicks
+    channelChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const btn = chip as HTMLButtonElement;
+        const id = btn.dataset.channelId || '';
+        if (selectedChannelIds.includes(id)) {
+          selectedChannelIds = selectedChannelIds.filter((x) => x !== id);
+        } else {
+          selectedChannelIds.push(id);
+        }
+        renderSelectionState();
+      });
+    });
+
+    // Delegate remove button in summary bar
+    selectedTags?.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest('[data-remove-id]') as HTMLElement | null;
+      if (target) {
+        const id = target.dataset.removeId || '';
+        selectedChannelIds = selectedChannelIds.filter((x) => x !== id);
+        renderSelectionState();
+      }
+    });
+
+    // Clear all button
+    clearAllBtn?.addEventListener('click', () => {
+      selectedChannelIds = [];
+      renderSelectionState();
+    });
+
+    // Starter bundle buttons
+    document.querySelectorAll('.cf-bundle-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const ids = (btn as HTMLElement).dataset.bundleIds?.split(',') || [];
+        selectedChannelIds = ids;
+        renderSelectionState();
+      });
+    });
+
+    // Category tabs
+    catTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        catTabs.forEach((t) => {
+          t.classList.remove('bg-[#0F5C4A]', 'text-white', 'shadow-2xs', 'active-cat');
+          t.classList.add('bg-[#FAF8F5]', 'text-[#5C5C5C]', 'border', 'border-[#E7E2DA]');
+          t.setAttribute('aria-selected', 'false');
+        });
+
+        tab.classList.remove('bg-[#FAF8F5]', 'text-[#5C5C5C]', 'border', 'border-[#E7E2DA]');
+        tab.classList.add('bg-[#0F5C4A]', 'text-white', 'shadow-2xs', 'active-cat');
+        tab.setAttribute('aria-selected', 'true');
+
+        currentCategory = (tab as HTMLElement).dataset.category || 'all';
+        filterChips();
+      });
+    });
+
+    // Search input
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value;
+      if (searchClear) {
+        if (searchQuery.trim().length > 0) {
+          searchClear.classList.remove('hidden');
+        } else {
+          searchClear.classList.add('hidden');
+        }
+      }
+      filterChips();
+    });
+
+    searchClear?.addEventListener('click', () => {
+      if (searchInput) {
+        searchInput.value = '';
+        searchQuery = '';
+        searchClear.classList.add('hidden');
+        filterChips();
+        searchInput.focus();
+      }
+    });
+
+    // Initial render
+    renderSelectionState();
+  })();
+</script>

@@ -1,0 +1,12 @@
+{
+  "authors": [
+    {
+      "id": "editorial-team",
+      "name": "LiveTVStreaming Editorial Team",
+      "role": "Independent Streaming Lab & Review Staff",
+      "bio": "Our editorial team tests and audits over 40 live TV streaming platforms, local broadcast carriage agreements, and cloud DVR systems each month.",
+      "avatar": "/authors/editorial-team.svg",
+      "verifiedCredentials": "Consolidated testing lab benchmarks and carriage audits"
+    }
+  ]
+}

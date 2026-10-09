@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AuthorByline from '../components/AuthorByline.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../lib/seo';
+
+const meta = generatePageMeta('trust', { title: 'How We Test', slug: 'how-we-test' });
+const breadcrumbs = [
+  { name: 'Editorial', url: '/about/' },
+  { name: 'How We Test', url: '/how-we-test/' }
+];
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+    <LastUpdated date="October 1, 2026" />
+
+    <div class="space-y-6 text-[#1A1A1A] leading-relaxed mt-6">
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight">
+        Our Testing Methodology & Standards
+      </h1>
+      <p class="text-lg text-[#5C5C5C]">
+        How we evaluate, benchmark, and audit live TV streaming providers for reliability, video bitrate, channel latency, and cloud DVR functionality.
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">1. Monthly Channel Carriage Audits</h2>
+      <p>
+        On the first of every month, our team verifies channel lineups directly against each provider's active electronic program guide (EPG). We cross-reference over 300 linear cable channels and local broadcast affiliates across the top 25 DMAs to track sudden network removals, dispute blackouts, and plan re-tiering.
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">2. Streaming Hardware Benchmarks</h2>
+      <p>
+        We test each application across a standardized suite of consumer hardware:
+      </p>
+      <ul class="list-disc pl-5 space-y-1 text-sm text-[#5C5C5C]">
+        <li><strong>Roku Ultra (2024 model)</strong> & Roku Streaming Stick 4K</li>
+        <li><strong>Apple TV 4K (3rd Gen)</strong> via Ethernet and 5GHz Wi-Fi 6</li>
+        <li><strong>Amazon Fire TV Stick 4K Max</strong></li>
+        <li><strong>Chromecast with Google TV (4K)</strong></li>
+        <li><strong>Samsung Smart TV (Tizen OS)</strong> & LG Smart TV (webOS)</li>
+      </ul>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">3. Channel Tune Time & Latency</h2>
+      <p>
+        Using high-speed 120fps cameras, we measure the precise latency between pressing the channel-up button and stable 60fps video playback rendering on screen. We evaluate video buffer stability during high-demand live sporting events (e.g. NFL playoffs, Super Bowl, NBA Finals).
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">4. Cloud DVR Usability</h2>
+      <p>
+        We test recording reliability, commercial fast-forward thumbnail responsiveness, automatic overtime extension logic for live sports, multi-profile separation, and retention policies.
+      </p>
+
+      <AuthorByline authorId="editorial-team" />
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import LastUpdated from '../../../components/LastUpdated.astro';
+import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
+
+import channelsData from '../../../data/channels.json';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../../../lib/seo';
+import type { Channel } from '../../../types';
+
+export function getStaticPaths() {
+  const categories = ['sports', 'news', 'entertainment', 'lifestyle', 'kids', 'local'];
+  return categories.map((cat) => ({
+    params: { cat },
+    props: { category: cat }
+  }));
+}
+
+interface Props {
+  category: string;
+}
+
+const { category } = Astro.props;
+const channels = (channelsData.channels as unknown as Channel[]).filter((c) => c.category === category);
+const allCategories = ['sports', 'news', 'entertainment', 'lifestyle', 'kids', 'local'];
+
+const meta = generatePageMeta('channel-category', { category });
+const breadcrumbs = [
+  { name: 'Channels', url: '/channels/' },
+  { name: category.toUpperCase(), url: `/channels/category/${category}/` }
+];
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="mb-8">
+      <LastUpdated date="October 1, 2026" />
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A] mt-2 capitalize">
+        {category} Channels Streaming Directory
+      </h1>
+      <p class="text-base text-[#5C5C5C] mt-2 max-w-2xl leading-relaxed">
+        Compare carriage across live TV streaming providers for all tracked {category} television networks.
+      </p>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap gap-2 mt-5">
+        <a
+          href="/channels/"
+          class="px-3 py-1 rounded text-xs font-medium bg-white border border-[#E7E2DA] text-[#5C5C5C] hover:text-[#1A1A1A]"
+        >
+          All Channels
+        </a>
+        {allCategories.map((c) => (
+          <a
+            href={`/channels/category/${c}/`}
+            class={`px-3 py-1 rounded text-xs font-medium uppercase ${
+              c === category
+                ? 'bg-[#0F5C4A] text-white font-semibold'
+                : 'bg-white border border-[#E7E2DA] text-[#5C5C5C] hover:text-[#1A1A1A]'
+            }`}
+          >
+            {c}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <AffiliateDisclosure />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 my-8">
+      {channels.map((ch) => (
+        <a
+          href={`/channels/${ch.slug}/`}
+          class="group block p-4 bg-white border border-[#E7E2DA] hover:border-[#0F5C4A] rounded hover:shadow-2xs transition-all"
+        >
+          <div class="flex items-center justify-between gap-1 mb-1">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A] group-hover:text-[#0F5C4A] truncate">
+              {ch.name}
+            </span>
+            <span class="text-[10px] text-stone-400 uppercase font-sans shrink-0">
+              {ch.category}
+            </span>
+          </div>
+          <p class="text-xs text-[#5C5C5C] line-clamp-2 leading-relaxed">
+            {ch.description}
+          </p>
+          <span class="text-[11px] font-semibold text-[#0F5C4A] mt-2 inline-block">
+            Carried on {ch.availableOn.length} services &rarr;
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

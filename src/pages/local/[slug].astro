@@ -1,0 +1,353 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import Button from '../../components/Button.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AdSlot from '../../components/AdSlot.astro';
+
+import marketsData from '../../data/markets.json';
+import servicesData from '../../data/services.json';
+import { getNearbyMarkets } from '../../lib/routes';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema, generateFAQSchema, hashString } from '../../lib/seo';
+import type { LocalMarket, StreamingService, FAQItem } from '../../types';
+
+export function getStaticPaths() {
+  const markets = marketsData.markets as unknown as LocalMarket[];
+  return markets.map((market) => ({
+    params: { slug: market.slug },
+    props: { market }
+  }));
+}
+
+interface Props {
+  market: LocalMarket;
+}
+
+const { market } = Astro.props;
+const allServices = servicesData.services as unknown as StreamingService[];
+const nearby = getNearbyMarkets(market, 5);
+
+// Compute best service for this city (highest station count, then lowest price)
+const serviceLocalScores = allServices.map((svc) => {
+  const avail = market.availability[svc.id] || { abc: false, cbs: false, nbc: false, fox: false, cw: false, pbs: false };
+  const stationCount = Object.values(avail).filter(Boolean).length;
+  return {
+    service: svc,
+    stationCount,
+    avail
+  };
+}).sort((a, b) => {
+  if (b.stationCount !== a.stationCount) return b.stationCount - a.stationCount;
+  return a.service.monthlyPrice - b.service.monthlyPrice;
+});
+
+const bestService = serviceLocalScores[0];
+
+const hash = hashString(market.slug);
+const cityIntroVariants = [
+  `Streaming local broadcast television in ${market.name} has never been more flexible. Rather than dealing with cable company rental boxes, you can stream your local ABC, CBS, NBC, and FOX station feeds directly through your internet connection.`,
+  `Looking to cut cable in ${market.city}, ${market.state}? Our DMA broadcast directory checks carriage of ${market.localAffiliates.abc}, ${market.localAffiliates.cbs}, ${market.localAffiliates.nbc}, and ${market.localAffiliates.fox} across every major live TV streaming provider.`,
+  `Get complete local news, weather alerts, and regional sports in ${market.name}. Review which streaming providers carry your local affiliate stations without contractual commitments.`
+];
+const introText = cityIntroVariants[hash % cityIntroVariants.length];
+
+const marketFaqs: FAQItem[] = [
+  {
+    question: `Which streaming service is best for local channels in ${market.city}?`,
+    answer: `In ${market.city}, ${bestService.service.name} provides the most complete local carriage, delivering ${bestService.stationCount} of the major broadcast network affiliates (including ${market.localAffiliates.abc} and ${market.localAffiliates.nbc}) at $${bestService.service.monthlyPrice.toFixed(2)}/month.`
+  },
+  {
+    question: `Can I watch local broadcast stations in ${market.city} with a free HD antenna?`,
+    answer: `Yes. Because ${market.city} is a major designated market area (DMA #${market.dmaRank}), high-definition digital over-the-air (OTA) antennas can pick up ${market.localAffiliates.abc}, ${market.localAffiliates.cbs}, ${market.localAffiliates.nbc}, ${market.localAffiliates.fox}, ${market.localAffiliates.cw}, and ${market.localAffiliates.pbs} in uncompressed 1080i/720p for free.`
+  },
+  {
+    question: `Does Sling TV carry local channels in ${market.city}?`,
+    answer: `Sling TV carries FOX or NBC only in select major metropolitan areas on its Sling Blue plan. In most markets, Sling encourages cord-cutters to integrate an AirTV antenna tuner for free broadcast stations.`
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Local Markets', url: '/local/' },
+  { name: market.state, url: `/local/state/${market.state.toLowerCase()}/` },
+  { name: market.name, url: `/local/${market.slug}/` }
+];
+
+const meta = generatePageMeta('local', {
+  marketName: market.name,
+  city: market.city,
+  state: market.state,
+  slug: market.slug
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateFAQSchema(marketFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <LastUpdated date="October 1, 2026" />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs uppercase tracking-wider text-[#0F5C4A] font-semibold">
+          Nielsen DMA Rank #{market.dmaRank}
+        </span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        Live TV Streaming in {market.name} (2026 Local Guide)
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        {introText}
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Market Local Affiliates Directory -->
+    <section class="my-8 bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mb-3">
+        Local Broadcast Affiliates in {market.name}
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">ABC Affiliate</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.abc}</span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">CBS Affiliate</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.cbs}</span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">NBC Affiliate</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.nbc}</span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">FOX Affiliate</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.fox}</span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">The CW</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.cw}</span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">PBS Member</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">{market.localAffiliates.pbs}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Best Option for This City Callout -->
+    {bestService && (
+      <div class="my-8 bg-white border border-[#0F5C4A]/60 rounded p-6 shadow-2xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-[#0F5C4A] block mb-1">
+              Top Pick for {market.city}
+            </span>
+            <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+              {bestService.service.name} (${bestService.service.monthlyPrice.toFixed(2)}/mo)
+            </h2>
+            <p class="text-xs text-[#5C5C5C] mt-1 max-w-xl">
+              Carries {bestService.stationCount} of 6 local network stations in {market.name}. Unlimited cloud DVR and zero long-term contract.
+            </p>
+          </div>
+          <CTAButton
+            href={bestService.service.affiliateUrl}
+            serviceName={bestService.service.name}
+            shortName={bestService.service.shortName}
+            variant="primary"
+            class="sm:w-auto shrink-0"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Ad slot -->
+    <AdSlot slotId="market-mid" format="leaderboard" />
+
+    <!-- Carrier Carriage Matrix Table -->
+    <!-- Carriage by Service Table -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        Local Channel Carriage by Streaming Service in {market.city}
+      </h2>
+
+      <!-- Mobile Carriage Cards (< 768px): block md:hidden -->
+      <div class="block md:hidden space-y-3">
+        {serviceLocalScores.map(({ service: svc, avail }, idx) => (
+          <div class={`bg-white border rounded-[6px] p-4 text-xs space-y-3 ${
+            idx === 0 ? 'border-[#0F5C4A]/50 shadow-2xs' : 'border-[#E7E2DA]'
+          }`}>
+            <div class="flex items-baseline justify-between gap-2 border-b border-stone-100 pb-2">
+              <a
+                href={`/services/${svc.slug}/`}
+                class="font-editorial text-[19px] font-bold text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline"
+              >
+                {svc.name}
+              </a>
+              <span class="font-editorial text-base font-bold text-[#1A1A1A] whitespace-nowrap">
+                ${svc.monthlyPrice.toFixed(2)}<span class="font-sans text-xs font-normal text-[#5C5C5C] ml-0.5">/mo</span>
+              </span>
+            </div>
+
+            <!-- Network Badges Grid -->
+            <div>
+              <span class="block text-[10px] uppercase tracking-wider text-stone-400 mb-1.5">Carriage Checklist</span>
+              <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">ABC</span>
+                  {avail.abc ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">CBS</span>
+                  {avail.cbs ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">NBC</span>
+                  {avail.nbc ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">FOX</span>
+                  {avail.fox ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">CW</span>
+                  {avail.cw ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+                <div class="bg-stone-50 border border-stone-200/60 rounded p-1.5">
+                  <span class="block text-[10px] text-[#5C5C5C] font-semibold">PBS</span>
+                  {avail.pbs ? <span class="text-emerald-700 font-bold">✓ Yes</span> : <span class="text-stone-400 font-bold">–</span>}
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-stone-100 flex flex-col gap-1.5">
+              <Button
+                href={svc.affiliateUrl}
+                variant={idx === 0 ? 'highlight' : 'primary'}
+                fullWidth={true}
+                ariaLabel={`Get ${svc.shortName || svc.name}`}
+              >
+                <span>Get {svc.shortName || svc.name}</span>
+              </Button>
+              <a
+                href={`/services/${svc.slug}/`}
+                class="btn-link text-xs py-1 text-center justify-center"
+              >
+                Read review
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Desktop Table (>= 768px): hidden md:block -->
+      <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+        <table class="w-full text-left text-xs border-collapse table-fixed">
+          <colgroup>
+            <col class="w-[28%]" />
+            <col class="w-[18%]" />
+            <col class="w-[7%]" />
+            <col class="w-[7%]" />
+            <col class="w-[7%]" />
+            <col class="w-[7%]" />
+            <col class="w-[7%]" />
+            <col class="w-[7%]" />
+            <col class="w-[12%]" />
+          </colgroup>
+          <thead>
+            <tr class="bg-[#FAF8F5] border-b border-[#E7E2DA] text-[#1A1A1A]">
+              <th class="py-3 px-4 font-semibold">Service</th>
+              <th class="py-3 px-4 font-semibold">Monthly Price</th>
+              <th class="py-3 px-2 font-semibold text-center">ABC</th>
+              <th class="py-3 px-2 font-semibold text-center">CBS</th>
+              <th class="py-3 px-2 font-semibold text-center">NBC</th>
+              <th class="py-3 px-2 font-semibold text-center">FOX</th>
+              <th class="py-3 px-2 font-semibold text-center">The CW</th>
+              <th class="py-3 px-2 font-semibold text-center">PBS</th>
+              <th class="py-3 px-4 text-right pr-4 font-semibold">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E7E2DA]">
+            {serviceLocalScores.map(({ service: svc, avail }) => (
+              <tr class="hover:bg-stone-50/75 transition-colors">
+                <td class="py-3 px-4 font-semibold text-sm text-[#1A1A1A] align-top">
+                  <a
+                    href={`/services/${svc.slug}/`}
+                    class="hover:text-[#0F5C4A] hover:underline"
+                  >
+                    {svc.name}
+                  </a>
+                </td>
+                <td class="py-3 px-4 tabular-nums text-xs align-top whitespace-nowrap">
+                  <span class="font-editorial text-base font-bold text-[#1A1A1A] inline-flex items-baseline">
+                    ${svc.monthlyPrice.toFixed(2)}<span class="font-sans text-xs font-normal text-[#5C5C5C] ml-0.5">/mo</span>
+                  </span>
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.abc ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.cbs ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.nbc ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.fox ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.cw ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-2 text-center align-top">
+                  {avail.pbs ? <span class="text-emerald-700 font-bold">✓</span> : <span class="text-stone-400">–</span>}
+                </td>
+                <td class="py-3 px-4 text-right pr-4 align-top">
+                  <CTAButton
+                    href={svc.affiliateUrl}
+                    serviceName={svc.name}
+                    shortName={svc.shortName}
+                    size="sm"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={marketFaqs} title={`Frequently Asked Questions for ${market.city} TV Viewers`} />
+
+    <!-- Nearby Markets -->
+    <RelatedLinks
+      title="Nearby & Similar Television Markets"
+      links={nearby.map((nb) => ({
+        title: `Live TV Streaming in ${nb.name}`,
+        url: `/local/${nb.slug}/`,
+        description: `DMA #${nb.dmaRank} local affiliate guide and streaming comparison.`,
+        badge: `${nb.state}`
+      }))}
+      hubUrl="/local/"
+      hubLabel="Browse All 25 Markets &rarr;"
+    />
+  </div>
+</BaseLayout>

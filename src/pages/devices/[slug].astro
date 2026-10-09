@@ -1,0 +1,228 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import ServiceCompareCard from '../../components/ServiceCompareCard.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AdSlot from '../../components/AdSlot.astro';
+
+import devicesData from '../../data/devices.json';
+import servicesData from '../../data/services.json';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema, generateFAQSchema } from '../../lib/seo';
+import type { StreamingDevice, StreamingService, FAQItem } from '../../types';
+
+export function getStaticPaths() {
+  const devices = devicesData.devices as unknown as StreamingDevice[];
+  return devices.map((device) => ({
+    params: { slug: device.slug },
+    props: { device }
+  }));
+}
+
+interface Props {
+  device: StreamingDevice;
+}
+
+const { device } = Astro.props;
+const allServices = servicesData.services as unknown as StreamingService[];
+
+const supported = allServices.filter((s) =>
+  device.supportedServices.includes(s.id)
+);
+
+const recommended = allServices.find((s) => s.id === device.recommendedService) || supported[0];
+const otherDevices = (devicesData.devices as unknown as StreamingDevice[])
+  .filter((d) => d.id !== device.id)
+  .slice(0, 6);
+
+const deviceFaqs: FAQItem[] = [
+  {
+    question: `Which live TV service works best on ${device.name}?`,
+    answer: `Our top-rated live TV streaming service on ${device.name} is ${recommended.name}. It provides the fastest channel tune time, responsive remote navigation, and crisp 1080p 60fps playback.`
+  },
+  {
+    question: `Do I need to buy special cables to stream live TV on ${device.name}?`,
+    answer: `No special cables are necessary. As long as your ${device.name} is connected to home Wi-Fi or Ethernet and running the latest operating system, you can download any provider app directly from the official store.`
+  },
+  {
+    question: `Can I watch 4K live sports on ${device.name}?`,
+    answer: `Yes, provided your ${device.name} model and TV support 4K HDR playback and the streaming service (such as YouTube TV or Fubo) provides a native 4K event feed.`
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Devices', url: '/devices/' },
+  { name: device.name, url: `/devices/${device.slug}/` }
+];
+
+const meta = generatePageMeta('device', {
+  deviceName: device.name,
+  slug: device.slug
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateFAQSchema(deviceFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <LastUpdated date="October 1, 2026" />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs uppercase tracking-wider text-[#0F5C4A] font-semibold">
+          Hardware & Platform Guide
+        </span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        Best Live TV Streaming Services for {device.name}
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        Which live TV streaming apps run fastest on {device.name}? We benchmark app stability, remote control integration, and stream quality to find your best option.
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Setup Tips Card -->
+    <div class="my-8 bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mb-2">
+        Setup Tips & Performance Notes for {device.name}
+      </h2>
+      <p class="text-sm text-[#5C5C5C] leading-relaxed">
+        {device.setupTips}
+      </p>
+    </div>
+
+    <!-- Recommended Service Banner -->
+    {recommended && (
+      <div class="my-8 bg-white border border-[#0F5C4A]/60 rounded p-6 shadow-2xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-[#0F5C4A] block mb-1">
+              Top Pick for {device.name}
+            </span>
+            <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+              {recommended.name} (${recommended.monthlyPrice.toFixed(2)}/mo)
+            </h2>
+            <p class="text-xs text-[#5C5C5C] mt-1 max-w-xl">
+              {recommended.summary} Optimized interface and smooth remote integration.
+            </p>
+          </div>
+          <CTAButton
+            href={recommended.affiliateUrl}
+            serviceName={recommended.name}
+            shortName={recommended.shortName}
+            variant="primary"
+            class="sm:w-auto shrink-0"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Ad slot -->
+    <AdSlot slotId="device-mid" format="leaderboard" />
+
+    <!-- Supported Services Table -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        All Compatible Live TV Apps for {device.name}
+      </h2>
+
+      <!-- Mobile Card List (< 768px): block md:hidden -->
+      <div class="block md:hidden space-y-3">
+        {supported.map((svc, idx) => (
+          <ServiceCompareCard service={svc} isRankOne={idx === 0} />
+        ))}
+      </div>
+
+      <!-- Desktop Table (>= 768px): hidden md:block -->
+      <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+        <table class="w-full text-left text-xs border-collapse table-fixed">
+          <colgroup>
+            <col class="w-[32%]" />
+            <col class="w-[18%]" />
+            <col class="w-[14%]" />
+            <col class="w-[12%]" />
+            <col class="w-[12%]" />
+            <col class="w-[12%]" />
+          </colgroup>
+          <thead>
+            <tr class="bg-[#FAF8F5] border-b border-[#E7E2DA] text-[#1A1A1A]">
+              <th class="py-3 px-4 font-semibold">Service</th>
+              <th class="py-3 px-4 font-semibold">Price</th>
+              <th class="py-3 px-4 font-semibold">Channels</th>
+              <th class="py-3 px-4 font-semibold">Free Trial</th>
+              <th class="py-3 px-4 font-semibold">Cloud DVR</th>
+              <th class="py-3 px-4 text-right pr-4 font-semibold">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E7E2DA]">
+            {supported.map((svc) => (
+              <tr class="hover:bg-stone-50/75 transition-colors">
+                <td class="py-3.5 px-4 align-top">
+                  <a
+                    href={`/services/${svc.slug}/`}
+                    class="font-bold text-sm text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline"
+                  >
+                    {svc.name}
+                  </a>
+                </td>
+                <td class="py-3.5 px-4 tabular-nums font-semibold align-top whitespace-nowrap">
+                  <span class="font-editorial text-base font-bold text-[#1A1A1A] inline-flex items-baseline">
+                    ${(svc.promoPrice ?? svc.monthlyPrice).toFixed(2)}<span class="font-sans text-xs font-normal text-[#5C5C5C] ml-0.5">/mo</span>
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 tabular-nums align-top whitespace-nowrap">{svc.channelCount}+</td>
+                <td class="py-3.5 px-4 align-top whitespace-nowrap">
+                  {svc.freeTrialDays > 0 ? `${svc.freeTrialDays} Days` : '–'}
+                </td>
+                <td class="py-3.5 px-4 text-[#5C5C5C] align-top break-words">{svc.dvrStorage}</td>
+                <td class="py-3.5 px-4 text-right pr-4 align-top">
+                  <CTAButton
+                    href={svc.affiliateUrl}
+                    serviceName={svc.name}
+                    shortName={svc.shortName}
+                    size="sm"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={deviceFaqs} title={`FAQs About Streaming on ${device.name}`} />
+
+    <!-- Other Devices -->
+    <RelatedLinks
+      title="Explore Other Streaming Devices & Platforms"
+      links={otherDevices.map((d) => ({
+        title: `Best Live TV Services for ${d.name}`,
+        url: `/devices/${d.slug}/`,
+        description: d.setupTips,
+        badge: 'Device'
+      }))}
+      hubUrl="/devices/"
+      hubLabel="All Devices Directory &rarr;"
+    />
+  </div>
+</BaseLayout>

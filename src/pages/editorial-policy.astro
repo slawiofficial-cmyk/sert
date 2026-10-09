@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../lib/seo';
+
+const meta = generatePageMeta('trust', { title: 'Editorial Policy', slug: 'editorial-policy' });
+const breadcrumbs = [
+  { name: 'Editorial', url: '/about/' },
+  { name: 'Editorial Policy', url: '/editorial-policy/' }
+];
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+    <LastUpdated date="October 1, 2026" />
+
+    <div class="space-y-6 text-[#1A1A1A] leading-relaxed mt-6">
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight">
+        Editorial Policy & Ethics
+      </h1>
+      <p class="text-lg text-[#5C5C5C]">
+        Our standards for factual accuracy, conflict-of-interest prevention, and consumer advocacy.
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">Reader First, Always</h2>
+      <p>
+        Every recommendation on LiveTVStreaming.services is formulated entirely by our editorial team based on hands-on evaluation and structured carriage data. We never alter our ratings, pros/cons, or pick classifications based on affiliate commissions or commercial relationships.
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">Zero Piracy Policy</h2>
+      <p>
+        We cover only legal, licensed, authorized streaming services operating in compliance with US telecommunications laws. We strictly avoid and condemn illegal IPTV schemes, illicit streams, and copyright-infringing workarounds.
+      </p>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">Corrections & Updates</h2>
+      <p>
+        When pricing, channel additions, or carriage disputes change, we update our databases promptly. If you spot an error in local station carriage or pricing, our editorial team reviews corrections within 24 hours.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

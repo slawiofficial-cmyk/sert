@@ -1,0 +1,94 @@
+{
+  "lastVerified": "2026-10-01",
+  "_disclaimer": "App availability verified on device operating systems running the latest public firmware.",
+  "devices": [
+    {
+      "id": "roku",
+      "name": "Roku (Streaming Sticks & Roku TV)",
+      "slug": "roku",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Ensure OS 12.0 or higher. For optimum 4K live sports playback, use 5GHz Wi-Fi or an Ethernet adapter on Roku Ultra.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "amazon-fire-tv",
+      "name": "Amazon Fire TV (Stick & Omni TV)",
+      "slug": "amazon-fire-tv",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Fire OS offers deep Alexa voice remote integration. You can say 'Alexa, tune to ESPN on YouTube TV' directly.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "apple-tv",
+      "name": "Apple TV (4K & HD)",
+      "slug": "apple-tv",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Fubo and YouTube TV both offer advanced multi-view features specifically optimized for the Apple TV A15 Bionic processor.",
+      "recommendedService": "fubo"
+    },
+    {
+      "id": "google-tv",
+      "name": "Google TV & Chromecast",
+      "slug": "google-tv",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "The 'Live' tab on the Google TV home screen integrates YouTube TV and Sling TV channels directly into the system guide.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "samsung-smart-tv",
+      "name": "Samsung Smart TV (Tizen OS)",
+      "slug": "samsung-smart-tv",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Available on 2017+ Tizen models. Use the Samsung Smart Hub to pin your live streaming service to the first app slot.",
+      "recommendedService": "hulu-live"
+    },
+    {
+      "id": "lg-smart-tv",
+      "name": "LG Smart TV (webOS)",
+      "slug": "lg-smart-tv",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"],
+      "setupTips": "Compatible with webOS 4.0+. Philo and Frndly TV require an external streaming stick on select LG models.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "vizio-smartcast",
+      "name": "Vizio SmartCast",
+      "slug": "vizio-smartcast",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Direct apps available on SmartCast homescreen or stream via built-in Chromecast & Apple AirPlay.",
+      "recommendedService": "sling-tv"
+    },
+    {
+      "id": "xbox",
+      "name": "Xbox (Series X/S & Xbox One)",
+      "slug": "xbox",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo"],
+      "setupTips": "Download directly from Microsoft Store. Supports background app switching during gaming sessions.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "playstation",
+      "name": "PlayStation 5 & PS4",
+      "slug": "playstation",
+      "supportedServices": ["youtube-tv", "hulu-live"],
+      "setupTips": "Locate under the Media hub tab. Sling and Fubo do not currently maintain native PlayStation apps.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "ios",
+      "name": "iPhone & iPad (iOS / iPadOS)",
+      "slug": "ios",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "Supports picture-in-picture (PiP) background playback and AirPlay casting to any AirPlay 2-compatible receiver.",
+      "recommendedService": "youtube-tv"
+    },
+    {
+      "id": "android",
+      "name": "Android Phones & Tablets",
+      "slug": "android",
+      "supportedServices": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo", "frndly-tv"],
+      "setupTips": "All major providers support Google Cast and PiP mode for watching live sports while multi-tasking.",
+      "recommendedService": "youtube-tv"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+---
+interface Props {
+  authorId?: string;
+  date?: string;
+}
+
+const { authorId = 'editorial-team', date = 'October 2026' } = Astro.props;
+const name = 'LiveTVStreaming Editorial Team';
+const role = 'Independent Streaming Lab & Review Staff';
+const bio = 'Evaluates 40+ streaming platforms and audits 300+ cable channel feeds monthly.';
+---
+
+<div class="flex items-center gap-3 py-3 border-y border-[#E7E2DA] text-xs text-[#5C5C5C] my-5">
+  <div class="w-9 h-9 rounded-full bg-[#0F5C4A]/10 border border-[#0F5C4A]/20 flex items-center justify-center font-bold text-[#0F5C4A] text-xs shrink-0 select-none">
+    LT
+  </div>
+  <div class="leading-snug">
+    <div>
+      <span class="font-semibold text-[#1A1A1A]">{name}</span>
+      <span class="mx-1.5 text-stone-300">·</span>
+      <span>{role}</span>
+    </div>
+    <div class="text-[11px] text-[#5C5C5C]">
+      <span>{bio}</span>
+      <span class="mx-1 text-stone-300">·</span>
+      <a href="/how-we-test/" class="text-[#0F5C4A] hover:underline">
+        How we test
+      </a>
+    </div>
+  </div>
+</div>

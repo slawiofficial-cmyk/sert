@@ -1,0 +1,64 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../index.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  jsonLd?: Record<string, any> | Array<Record<string, any>>;
+}
+
+const { title, description, canonical, jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-US" class="bg-[#FAF8F5] text-[#1A1A1A] antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph Social Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LiveTVStreaming.services" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+
+    <!-- Analytics Placeholder (cookie-free, uncomment when integrating privacy-friendly telemetry) -->
+    <!-- <script defer data-domain="livetvstreaming.services" src="https://plausible.io/js/script.js"></script> -->
+  </head>
+  <body class="min-h-screen bg-[#FAF8F5] text-[#1A1A1A] selection:bg-[#0F5C4A]/10 selection:text-[#0F5C4A] flex flex-col">
+    <!-- WCAG 2.2 AA Skip to content link -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0F5C4A] focus:text-white focus:rounded focus:outline-hidden text-xs font-semibold"
+    >
+      Skip to main content
+    </a>
+
+    <Header />
+
+    <main id="main-content" class="flex-grow">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

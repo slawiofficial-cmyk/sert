@@ -1,0 +1,60 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  serviceName: string;
+  shortName?: string;
+  monthlyPrice: number;
+  promoPrice?: number | null;
+  promoDescription?: string | null;
+  affiliateUrl: string;
+}
+
+const {
+  serviceName,
+  shortName,
+  monthlyPrice,
+  promoPrice,
+  promoDescription,
+  affiliateUrl
+} = Astro.props;
+
+const effectivePrice = promoPrice ?? monthlyPrice;
+const labelName = shortName || serviceName;
+---
+
+<!-- Mobile Sticky Bottom CTA Bar -->
+<!-- Visible only below 768px (md:hidden) on service review pages -->
+<aside
+  class="md:hidden fixed inset-x-0 bottom-0 z-40 bg-white border-t border-[#E7E2DA] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-4 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))]"
+  aria-label={`Subscribe to ${serviceName}`}
+>
+  <div class="max-w-md mx-auto flex items-center justify-between gap-3">
+    <div class="min-w-0">
+      <span class="text-[11px] font-medium text-[#5C5C5C] truncate block">
+        {serviceName}
+      </span>
+      <div class="flex items-baseline gap-1">
+        <span class="font-editorial text-xl font-bold text-[#1A1A1A] tabular-nums leading-none">
+          ${effectivePrice.toFixed(2)}
+        </span>
+        <span class="text-xs text-[#5C5C5C]">/mo</span>
+      </div>
+      {promoDescription && (
+        <span class="text-[10px] text-[#C2410C] block leading-tight truncate">
+          {promoDescription}
+        </span>
+      )}
+    </div>
+
+    <Button
+      href={affiliateUrl}
+      variant="primary"
+      size="sm"
+      class="shrink-0"
+      ariaLabel={`Get ${labelName} official subscription`}
+    >
+      <span>Get {labelName}</span>
+    </Button>
+  </div>
+</aside>

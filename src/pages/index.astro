@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ChannelFinder from '../components/ChannelFinder.astro';
+import FAQ from '../components/FAQ.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import AdSlot from '../components/AdSlot.astro';
+
+import servicesData from '../data/services.json';
+import { generatePageMeta, generateSiteSchema, generateFAQSchema } from '../lib/seo';
+import type { StreamingService, FAQItem } from '../types';
+
+const services = servicesData.services as unknown as StreamingService[];
+const topPicks = [...services].sort((a, b) => b.editorialRating - a.editorialRating).slice(0, 4);
+
+const meta = generatePageMeta('home');
+
+const homeFaqs: FAQItem[] = [
+  {
+    question: 'Which live TV streaming service is best overall in 2026?',
+    answer: 'For the vast majority of US cord-cutters, YouTube TV ($72.99/mo) remains our top recommendation. It includes all four major broadcast networks (ABC, CBS, FOX, NBC) in nearly 100% of US DMAs, an unlimited 9-month cloud DVR, three simultaneous streams, and the smoothest channel switching experience.'
+  },
+  {
+    question: 'What is the cheapest live TV streaming service?',
+    answer: 'Frndly TV is the absolute cheapest option starting at $7.99/month for 40+ feel-good channels like Hallmark, The Weather Channel, and MeTV. If you want general entertainment networks without sports or broadcast locals, Philo is $28/month. If you need live sports (ESPN or FS1), Sling TV is the lowest-cost option starting at $40/month.'
+  },
+  {
+    question: 'Can I watch local broadcast channels (ABC, CBS, FOX, NBC) on streaming services?',
+    answer: 'Yes. YouTube TV, Hulu + Live TV, Fubo, and DirecTV Stream carry local affiliates for ABC, CBS, FOX, and NBC across almost every US television market. Sling TV offers limited local coverage in select cities, while Philo and Frndly TV carry zero broadcast networks.'
+  },
+  {
+    question: 'Do live TV streaming services require contracts or equipment rentals?',
+    answer: 'No. Unlike traditional cable companies (Comcast Xfinity, Spectrum, Cox), every live TV streaming service operates on a month-to-month basis with zero cancellation fees. You stream directly using your existing Wi-Fi and streaming devices (Roku, Amazon Fire TV, Apple TV, Google TV, or smart TV).'
+  },
+  {
+    question: 'Which service is best for regional sports (RSNs)?',
+    answer: 'DirecTV Stream (Choice plan and above) and Fubo offer the most extensive Regional Sports Network (RSN) carriage, including FanDuel Sports Network (formerly Bally Sports), YES Network, Marquee Sports Network, and NBC Sports RSNs. YouTube TV and Hulu do not carry most standalone RSNs.'
+  },
+  {
+    question: 'How fast does my internet speed need to be for live TV streaming?',
+    answer: 'We recommend at least 10 Mbps per simultaneous stream for reliable 1080p 60fps HD live television, and at least 25 to 50 Mbps if you stream live events in 4K HDR. A household standard broadband speed of 100 Mbps easily handles multiple concurrent streams.'
+  },
+  {
+    question: 'How does the Channel Finder calculator work?',
+    answer: 'Our interactive channel finder cross-references your selected must-have networks against our verified base tier carriage database. It computes exact coverage percentages and automatically highlights the lowest-cost service that provides 100% coverage.'
+  }
+];
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateFAQSchema(homeFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <!-- Editorial Headline & Mission -->
+    <section class="mb-10 max-w-4xl">
+      <div class="flex items-center gap-3 mb-3">
+        <LastUpdated date="October 1, 2026" />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs text-[#0F5C4A] font-semibold">2026 Cord-Cutter's Benchmark</span>
+      </div>
+
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A] leading-[1.15]">
+        The Independent Guide to Live TV Streaming Services
+      </h1>
+
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-4 leading-relaxed max-w-3xl">
+        Cut the cable cord without losing the channels, live sports, and local stations you rely on. We independently review every legal US streaming provider, test DVR performance, and verify channel carriage monthly.
+      </p>
+
+      <AffiliateDisclosure />
+    </section>
+
+    <!-- Ranked List: Our Top Picks -->
+    <section class="my-10">
+      <div class="flex items-baseline justify-between mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#0F5C4A]">
+            Tested Recommendations
+          </span>
+          <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+            Our Top Picks for 2026
+          </h2>
+        </div>
+        <a
+          href="/services/"
+          class="text-xs font-semibold text-[#0F5C4A] hover:underline"
+        >
+          Compare All 7 Services &rarr;
+        </a>
+      </div>
+
+      <div class="space-y-3">
+        {topPicks.map((service, idx) => (
+          <ServiceCard service={service} rank={idx + 1} />
+        ))}
+      </div>
+    </section>
+
+    <!-- Ad slot placeholder (Zero CLS) -->
+    <AdSlot slotId="home-top" format="leaderboard" />
+
+    <!-- Channel Finder Tool Island -->
+    <section class="my-12">
+      <ChannelFinder
+        title="Channel Finder: What Do You Actually Watch?"
+        subtitle="Select your channels to calculate which streaming service carries them for the lowest monthly cost."
+      />
+    </section>
+
+    <!-- Full Comparison Table -->
+    <section class="my-14">
+      <div class="mb-4">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#0F5C4A]">
+          Comprehensive Data
+        </span>
+        <h2 class="font-editorial text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+          Compare All Live TV Streaming Providers
+        </h2>
+        <p class="text-sm text-[#5C5C5C] mt-1">
+          Standard baseline pricing, simultaneous streams, cloud DVR capabilities, and contract terms.
+        </p>
+      </div>
+
+      <ComparisonTable services={services} />
+    </section>
+
+    <!-- Editorial Guide: How to Choose -->
+    <section class="my-14 bg-white border border-[#E7E2DA] rounded p-6 sm:p-8">
+      <h2 class="font-editorial text-2xl sm:text-3xl font-bold text-[#1A1A1A] mb-4">
+        How to Choose the Right Live TV Streaming Service
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-[#5C5C5C] leading-relaxed">
+        <div>
+          <h3 class="font-semibold text-[#1A1A1A] text-base mb-2">
+            1. Audit Your Live Must-Haves
+          </h3>
+          <p>
+            Most cord-cutters only watch 5 to 10 channels regularly. Don't pay $80/mo for 180 channels when a $40 plan like Sling TV or a $28 entertainment bundle like Philo carries everything your household tunes into.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-[#1A1A1A] text-base mb-2">
+            2. Check Your Local Network Broadcasts
+          </h3>
+          <p>
+            If NFL Sundays or local news are essential, verify whether the service carries ABC, CBS, FOX, and NBC in your specific TV DMA. Alternatively, install an inexpensive $20 digital antenna for free high-definition broadcast channels.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-[#1A1A1A] text-base mb-2">
+            3. Evaluate Simultaneous Screens
+          </h3>
+          <p>
+            If multiple family members stream in different rooms simultaneously, take note of stream limits. YouTube TV offers 3 streams, while Hulu base plans only allow 2. Fubo and DirecTV Stream allow up to 10–20 in-home streams.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-6 border-t border-[#E7E2DA] flex flex-wrap items-center justify-between gap-4 text-xs">
+        <span>Curious about our testing hardware and streaming lab?</span>
+        <a
+          href="/how-we-test/"
+          class="text-[#0F5C4A] font-semibold hover:underline"
+        >
+          Read Our Testing Methodology &rarr;
+        </a>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <FAQ items={homeFaqs} title="Frequently Asked Questions About Cord-Cutting" />
+  </div>
+</BaseLayout>
