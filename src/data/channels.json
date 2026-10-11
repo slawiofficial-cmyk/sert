@@ -1,0 +1,492 @@
+{
+  "lastVerified": "2026-10-01",
+  "_disclaimer": "Channel lineup availability verified across standard base plans; add-on tiers may apply.",
+  "channels": [
+    {
+      "id": "espn",
+      "name": "ESPN",
+      "slug": "espn",
+      "category": "sports",
+      "logo": "/logos/channels/espn.svg",
+      "description": "The flagship 24/7 sports network featuring Monday Night Football, NBA broadcasts, College Football Playoff, and SportsCenter.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "espn2",
+      "name": "ESPN2",
+      "slug": "espn2",
+      "category": "sports",
+      "logo": "/logos/channels/espn2.svg",
+      "description": "Secondary sports telecasts including alternate game feeds, college basketball, tennis Grand Slams, and studio debate.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "fs1",
+      "name": "FS1 (Fox Sports 1)",
+      "slug": "fs1",
+      "category": "sports",
+      "logo": "/logos/channels/fs1.svg",
+      "description": "Live coverage of MLB baseball, college football, NASCAR, soccer, and sports talk with Colin Cowherd.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "fs2",
+      "name": "FS2 (Fox Sports 2)",
+      "slug": "fs2",
+      "category": "sports",
+      "logo": "/logos/channels/fs2.svg",
+      "description": "Companion network to FS1 with motorsports, horse racing, international soccer, and collegiate athletics.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "tnt",
+      "name": "TNT",
+      "slug": "tnt",
+      "category": "sports",
+      "logo": "/logos/channels/tnt.svg",
+      "description": "Home to Inside the NBA, NHL on TNT, NCAA March Madness, AEW wrestling, and blockbuster feature films.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "directv-stream"]
+    },
+    {
+      "id": "tbs",
+      "name": "TBS",
+      "slug": "tbs",
+      "category": "entertainment",
+      "logo": "/logos/channels/tbs.svg",
+      "description": "Comedy destination with MLB postseason baseball, NCAA March Madness games, and syndicated sitcoms.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "directv-stream"]
+    },
+    {
+      "id": "usa-network",
+      "name": "USA Network",
+      "slug": "usa-network",
+      "category": "entertainment",
+      "logo": "/logos/channels/usa.svg",
+      "description": "Premier League soccer, WWE Raw/SmackDown, NASCAR, Olympic trials, and procedural drama marathons.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "nfl-network",
+      "name": "NFL Network",
+      "slug": "nfl-network",
+      "category": "sports",
+      "logo": "/logos/channels/nfl-network.svg",
+      "description": "Exclusive football channel with live preseason games, Good Morning Football, and RedZone access packages.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "nba-tv",
+      "name": "NBA TV",
+      "slug": "nba-tv",
+      "category": "sports",
+      "logo": "/logos/channels/nba-tv.svg",
+      "description": "24/7 coverage of the National Basketball Association featuring live out-of-market games and analysis.",
+      "availableOn": ["youtube-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "mlb-network",
+      "name": "MLB Network",
+      "slug": "mlb-network",
+      "category": "sports",
+      "logo": "/logos/channels/mlb-network.svg",
+      "description": "Dedicated Major League Baseball network with live games, MLB Tonight analysis, and trade deadline specials.",
+      "availableOn": ["fubo", "directv-stream"]
+    },
+    {
+      "id": "golf-channel",
+      "name": "Golf Channel",
+      "slug": "golf-channel",
+      "category": "sports",
+      "logo": "/logos/channels/golf-channel.svg",
+      "description": "PGA Tour, LPGA, and European Tour golf tournament coverage alongside instructional programming.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "tennis-channel",
+      "name": "Tennis Channel",
+      "slug": "tennis-channel",
+      "category": "sports",
+      "logo": "/logos/channels/tennis-channel.svg",
+      "description": "ATP and WTA tour matches, Grand Slam highlights, and racquet sport commentary.",
+      "availableOn": ["fubo", "directv-stream"]
+    },
+    {
+      "id": "sec-network",
+      "name": "SEC Network",
+      "slug": "sec-network",
+      "category": "sports",
+      "logo": "/logos/channels/sec-network.svg",
+      "description": "Comprehensive live coverage of Southeastern Conference college football, basketball, and baseball.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "big-ten-network",
+      "name": "Big Ten Network",
+      "slug": "big-ten-network",
+      "category": "sports",
+      "logo": "/logos/channels/big-ten-network.svg",
+      "description": "Live Big Ten conference games, Olympic sports, and game-day tailgate analysis.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "acc-network",
+      "name": "ACC Network",
+      "slug": "acc-network",
+      "category": "sports",
+      "logo": "/logos/channels/acc-network.svg",
+      "description": "Atlantic Coast Conference live collegiate sports, coach interviews, and campus specials.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "cnn",
+      "name": "CNN",
+      "slug": "cnn",
+      "category": "news",
+      "logo": "/logos/channels/cnn.svg",
+      "description": "Global news leader providing 24/7 breaking updates, in-depth investigative reports, and political debates.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "directv-stream"]
+    },
+    {
+      "id": "fox-news",
+      "name": "Fox News Channel",
+      "slug": "fox-news",
+      "category": "news",
+      "logo": "/logos/channels/fox-news.svg",
+      "description": "Top-rated US cable news network broadcasting breaking headlines, opinion, and national political panels.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "msnbc",
+      "name": "MSNBC",
+      "slug": "msnbc",
+      "category": "news",
+      "logo": "/logos/channels/msnbc.svg",
+      "description": "Round-the-clock political analysis, progressive commentary, and breaking news coverage.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "cnbc",
+      "name": "CNBC",
+      "slug": "cnbc",
+      "category": "news",
+      "logo": "/logos/channels/cnbc.svg",
+      "description": "Financial market insights, stock ticker alerts, real-time Wall Street analysis, and evening documentaries.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "bloomberg",
+      "name": "Bloomberg Television",
+      "slug": "bloomberg",
+      "category": "news",
+      "logo": "/logos/channels/bloomberg.svg",
+      "description": "Global economic news, commodities data, cryptocurrency reporting, and corporate leadership interviews.",
+      "availableOn": ["youtube-tv", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "cspan",
+      "name": "C-SPAN",
+      "slug": "c-span",
+      "category": "news",
+      "logo": "/logos/channels/cspan.svg",
+      "description": "Unfiltered coverage of the US Congress, federal committee hearings, and public policy forums.",
+      "availableOn": ["youtube-tv", "directv-stream"]
+    },
+    {
+      "id": "weather-channel",
+      "name": "The Weather Channel",
+      "slug": "weather-channel",
+      "category": "news",
+      "logo": "/logos/channels/weather-channel.svg",
+      "description": "Real-time radar forecasts, hurricane and severe weather tracking, and climate documentaries.",
+      "availableOn": ["youtube-tv", "fubo", "directv-stream", "frndly-tv"]
+    },
+    {
+      "id": "hgtv",
+      "name": "HGTV",
+      "slug": "hgtv",
+      "category": "lifestyle",
+      "logo": "/logos/channels/hgtv.svg",
+      "description": "Home renovation, interior design competitions, real estate hunts, and makeover shows.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "food-network",
+      "name": "Food Network",
+      "slug": "food-network",
+      "category": "lifestyle",
+      "logo": "/logos/channels/food-network.svg",
+      "description": "Culinary competitions, celebrity chef tutorials, restaurant showcases, and holiday bake-offs.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "tlc",
+      "name": "TLC",
+      "slug": "tlc",
+      "category": "lifestyle",
+      "logo": "/logos/channels/tlc.svg",
+      "description": "Reality television featuring real-life family dynamics, weddings, lifestyle changes, and human interest stories.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "bravo",
+      "name": "Bravo",
+      "slug": "bravo",
+      "category": "entertainment",
+      "logo": "/logos/channels/bravo.svg",
+      "description": "Home of The Real Housewives franchise, Top Chef, Below Deck, and pop-culture reality programming.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "discovery-channel",
+      "name": "Discovery Channel",
+      "slug": "discovery-channel",
+      "category": "entertainment",
+      "logo": "/logos/channels/discovery.svg",
+      "description": "Non-fiction science, nature exploration, survival reality, and Shark Week specials.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "history-channel",
+      "name": "History Channel",
+      "slug": "history-channel",
+      "category": "entertainment",
+      "logo": "/logos/channels/history.svg",
+      "description": "Historical documentaries, archaeology mysteries, Pawn Stars, and outdoor survival adventures.",
+      "availableOn": ["hulu-live", "sling-tv", "directv-stream", "philo", "frndly-tv"]
+    },
+    {
+      "id": "amc",
+      "name": "AMC",
+      "slug": "amc",
+      "category": "entertainment",
+      "logo": "/logos/channels/amc.svg",
+      "description": "Acclaimed dramas including The Walking Dead universe, classic movie marathons, and original series.",
+      "availableOn": ["youtube-tv", "sling-tv", "directv-stream", "philo"]
+    },
+    {
+      "id": "fx",
+      "name": "FX",
+      "slug": "fx",
+      "category": "entertainment",
+      "logo": "/logos/channels/fx.svg",
+      "description": "Prestige dramatic series, Fargo, American Horror Story, and contemporary Hollywood hit movies.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "comedy-central",
+      "name": "Comedy Central",
+      "slug": "comedy-central",
+      "category": "entertainment",
+      "logo": "/logos/channels/comedy-central.svg",
+      "description": "South Park, The Daily Show, stand-up comedy specials, and irreverent animated series.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "paramount-network",
+      "name": "Paramount Network",
+      "slug": "paramount-network",
+      "category": "entertainment",
+      "logo": "/logos/channels/paramount-network.svg",
+      "description": "Original broadcast home of Yellowstone, Bar Rescue, and popular Hollywood action movies.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "disney-channel",
+      "name": "Disney Channel",
+      "slug": "disney-channel",
+      "category": "kids",
+      "logo": "/logos/channels/disney.svg",
+      "description": "Family sitcoms, Disney animated series, original TV movies, and tween programming.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "nickelodeon",
+      "name": "Nickelodeon",
+      "slug": "nickelodeon",
+      "category": "kids",
+      "logo": "/logos/channels/nickelodeon.svg",
+      "description": "Beloved cartoon franchises (SpongeBob SquarePants, PAW Patrol) and live-action youth comedy.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "cartoon-network",
+      "name": "Cartoon Network",
+      "slug": "cartoon-network",
+      "category": "kids",
+      "logo": "/logos/channels/cartoon-network.svg",
+      "description": "All-day animation for kids and teens, shifting to the adult-swim lineup in the late evening.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "directv-stream"]
+    },
+    {
+      "id": "hallmark-channel",
+      "name": "Hallmark Channel",
+      "slug": "hallmark-channel",
+      "category": "lifestyle",
+      "logo": "/logos/channels/hallmark.svg",
+      "description": "Heartwarming romantic movies, Countdown to Christmas holiday features, and wholesome family drama.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream", "philo", "frndly-tv"]
+    },
+    {
+      "id": "lifetime",
+      "name": "Lifetime",
+      "slug": "lifetime",
+      "category": "lifestyle",
+      "logo": "/logos/channels/lifetime.svg",
+      "description": "Original thriller and drama movies, Married at First Sight, and women-centered unscripted series.",
+      "availableOn": ["hulu-live", "sling-tv", "directv-stream", "philo", "frndly-tv"]
+    },
+    {
+      "id": "syfy",
+      "name": "Syfy",
+      "slug": "syfy",
+      "category": "entertainment",
+      "logo": "/logos/channels/syfy.svg",
+      "description": "Science fiction, fantasy, speculative thrillers, paranormal mysteries, and classic sci-fi cinema.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "mtv",
+      "name": "MTV",
+      "slug": "mtv",
+      "category": "entertainment",
+      "logo": "/logos/channels/mtv.svg",
+      "description": "Youth reality television, The Challenge, Catfish, Ridiculousness, and the Video Music Awards.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "bet",
+      "name": "BET",
+      "slug": "bet",
+      "category": "entertainment",
+      "logo": "/logos/channels/bet.svg",
+      "description": "Black Entertainment Television featuring original Tyler Perry comedies, gospel specials, and awards shows.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "vh1",
+      "name": "VH1",
+      "slug": "vh1",
+      "category": "entertainment",
+      "logo": "/logos/channels/vh1.svg",
+      "description": "Music culture reality TV, RuPaul's Drag Race, Love & Hip Hop, and documentary series.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "e-entertainment",
+      "name": "E!",
+      "slug": "e-entertainment",
+      "category": "entertainment",
+      "logo": "/logos/channels/e.svg",
+      "description": "Celebrity news, red-carpet events, Hollywood pop culture, and reality series.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "nat-geo",
+      "name": "National Geographic",
+      "slug": "nat-geo",
+      "category": "lifestyle",
+      "logo": "/logos/channels/natgeo.svg",
+      "description": "World-class nature photography, wildlife expeditions, scientific discoveries, and global cultures.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "animal-planet",
+      "name": "Animal Planet",
+      "slug": "animal-planet",
+      "category": "lifestyle",
+      "logo": "/logos/channels/animal-planet.svg",
+      "description": "Compelling wildlife stories, animal rescue teams, veterinary series, and companion pet care.",
+      "availableOn": ["youtube-tv", "hulu-live", "directv-stream", "philo"]
+    },
+    {
+      "id": "oxygen",
+      "name": "Oxygen True Crime",
+      "slug": "oxygen",
+      "category": "entertainment",
+      "logo": "/logos/channels/oxygen.svg",
+      "description": "True crime docuseries, cold-case reinvestigations, forensic science specials, and legal dramas.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "investigation-discovery",
+      "name": "Investigation Discovery (ID)",
+      "slug": "investigation-discovery",
+      "category": "entertainment",
+      "logo": "/logos/channels/id.svg",
+      "description": "Crime documentaries, homicide investigations, mystery solving, and forensic reenactments.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "tv-land",
+      "name": "TV Land",
+      "slug": "tv-land",
+      "category": "entertainment",
+      "logo": "/logos/channels/tv-land.svg",
+      "description": "Classic television sitcoms like Everybody Loves Raymond, The King of Queens, and The Golden Girls.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "travel-channel",
+      "name": "Travel Channel",
+      "slug": "travel-channel",
+      "category": "lifestyle",
+      "logo": "/logos/channels/travel-channel.svg",
+      "description": "Paranormal investigations, haunted locations, exotic travel journeys, and world curiosity tours.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream", "philo"]
+    },
+    {
+      "id": "local-abc",
+      "name": "ABC Local Affiliates",
+      "slug": "local-abc",
+      "category": "local",
+      "logo": "/logos/channels/abc.svg",
+      "description": "Local broadcast station for your DMA: Good Morning America, NBA Finals, Oscars, local 11pm news.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "local-cbs",
+      "name": "CBS Local Affiliates",
+      "slug": "local-cbs",
+      "category": "local",
+      "logo": "/logos/channels/cbs.svg",
+      "description": "Local broadcast station for your DMA: NFL on CBS, NCAA March Madness, 60 Minutes, local evening news.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "local-nbc",
+      "name": "NBC Local Affiliates",
+      "slug": "local-nbc",
+      "category": "local",
+      "logo": "/logos/channels/nbc.svg",
+      "description": "Local broadcast station for your DMA: Sunday Night Football, Today Show, Olympic Games, local breaking news.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "local-fox",
+      "name": "FOX Local Affiliates",
+      "slug": "local-fox",
+      "category": "local",
+      "logo": "/logos/channels/fox.svg",
+      "description": "Local broadcast station for your DMA: NFL on FOX, MLB World Series, local investigative news, prime-time hits.",
+      "availableOn": ["youtube-tv", "hulu-live", "sling-tv", "fubo", "directv-stream"]
+    },
+    {
+      "id": "local-cw",
+      "name": "The CW Local Affiliates",
+      "slug": "local-cw",
+      "category": "local",
+      "logo": "/logos/channels/cw.svg",
+      "description": "Local CW affiliate broadcasting LIV Golf, ACC football, NASCAR Xfinity Series, and drama series.",
+      "availableOn": ["youtube-tv", "hulu-live", "fubo", "directv-stream"]
+    },
+    {
+      "id": "local-pbs",
+      "name": "PBS Local Station",
+      "slug": "local-pbs",
+      "category": "local",
+      "logo": "/logos/channels/pbs.svg",
+      "description": "Public Broadcasting Service with local educational programming, PBS NewsHour, Frontline, and Masterpiece.",
+      "availableOn": ["youtube-tv"]
+    }
+  ]
+}

@@ -1,0 +1,631 @@
+{
+  "lastVerified": "2026-10-01",
+  "_disclaimer": "Local affiliate carriage based on Nielsen DMA geographic boundaries. Verification required per zip code.",
+  "markets": [
+    {
+      "id": "new-york-ny",
+      "name": "New York, NY",
+      "slug": "new-york-ny",
+      "city": "New York",
+      "state": "NY",
+      "dmaRank": 1,
+      "localAffiliates": {
+        "abc": "WABC-TV 7",
+        "cbs": "WCBS-TV 2",
+        "nbc": "WNBC 4",
+        "fox": "WNYW 5",
+        "cw": "WPIX 11",
+        "pbs": "WNET 13"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "los-angeles-ca",
+      "name": "Los Angeles, CA",
+      "slug": "los-angeles-ca",
+      "city": "Los Angeles",
+      "state": "CA",
+      "dmaRank": 2,
+      "localAffiliates": {
+        "abc": "KABC-TV 7",
+        "cbs": "KCBS-TV 2",
+        "nbc": "KNBC 4",
+        "fox": "KTTV 11",
+        "cw": "KTLA 5",
+        "pbs": "KCET / PBS SoCal"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "chicago-il",
+      "name": "Chicago, IL",
+      "slug": "chicago-il",
+      "city": "Chicago",
+      "state": "IL",
+      "dmaRank": 3,
+      "localAffiliates": {
+        "abc": "WLS-TV 7",
+        "cbs": "WBBM-TV 2",
+        "nbc": "WMAQ-TV 5",
+        "fox": "WFLD 32",
+        "cw": "WCIU-TV 26",
+        "pbs": "WTTW 11"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "philadelphia-pa",
+      "name": "Philadelphia, PA",
+      "slug": "philadelphia-pa",
+      "city": "Philadelphia",
+      "state": "PA",
+      "dmaRank": 4,
+      "localAffiliates": {
+        "abc": "WPVI-TV 6",
+        "cbs": "KYW-TV 3",
+        "nbc": "WCAU 10",
+        "fox": "WTXF-TV 29",
+        "cw": "WPSG 57",
+        "pbs": "WHYY-TV 12"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "dallas-fort-worth-tx",
+      "name": "Dallas-Fort Worth, TX",
+      "slug": "dallas-fort-worth-tx",
+      "city": "Dallas",
+      "state": "TX",
+      "dmaRank": 5,
+      "localAffiliates": {
+        "abc": "WFAA 8",
+        "cbs": "KTVT 11",
+        "nbc": "KXAS-TV 5",
+        "fox": "KDFW 4",
+        "cw": "KDAF 33",
+        "pbs": "KERA-TV 13"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "atlanta-ga",
+      "name": "Atlanta, GA",
+      "slug": "atlanta-ga",
+      "city": "Atlanta",
+      "state": "GA",
+      "dmaRank": 6,
+      "localAffiliates": {
+        "abc": "WSB-TV 2",
+        "cbs": "WANF 46",
+        "nbc": "WXIA-TV 11",
+        "fox": "WAGA-TV 5",
+        "cw": "WPCH-TV 17",
+        "pbs": "WGTV / GPB 8"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "houston-tx",
+      "name": "Houston, TX",
+      "slug": "houston-tx",
+      "city": "Houston",
+      "state": "TX",
+      "dmaRank": 7,
+      "localAffiliates": {
+        "abc": "KTRK-TV 13",
+        "cbs": "KHOU 11",
+        "nbc": "KPRC-TV 2",
+        "fox": "KRIV 26",
+        "cw": "KIAH 39",
+        "pbs": "KUHT 8"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "washington-dc",
+      "name": "Washington, DC",
+      "slug": "washington-dc",
+      "city": "Washington",
+      "state": "DC",
+      "dmaRank": 8,
+      "localAffiliates": {
+        "abc": "WJLA-TV 7",
+        "cbs": "WUSA 9",
+        "nbc": "WRC-TV 4",
+        "fox": "WTTG 5",
+        "cw": "WDCW 50",
+        "pbs": "WETA-TV 26"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "boston-ma",
+      "name": "Boston, MA",
+      "slug": "boston-ma",
+      "city": "Boston",
+      "state": "MA",
+      "dmaRank": 9,
+      "localAffiliates": {
+        "abc": "WCVB-TV 5",
+        "cbs": "WBZ-TV 4",
+        "nbc": "WBTS-CD 15",
+        "fox": "WFXT 25",
+        "cw": "WLVI 56",
+        "pbs": "WGBH-TV 2"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "san-francisco-bay-area-ca",
+      "name": "San Francisco-Oakland, CA",
+      "slug": "san-francisco-bay-area-ca",
+      "city": "San Francisco",
+      "state": "CA",
+      "dmaRank": 10,
+      "localAffiliates": {
+        "abc": "KGO-TV 7",
+        "cbs": "KPIX-TV 5",
+        "nbc": "KNTV 11",
+        "fox": "KTVU 2",
+        "cw": "KBCW 44",
+        "pbs": "KQED 9"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": true, "cbs": false, "nbc": true, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "phoenix-az",
+      "name": "Phoenix, AZ",
+      "slug": "phoenix-az",
+      "city": "Phoenix",
+      "state": "AZ",
+      "dmaRank": 11,
+      "localAffiliates": {
+        "abc": "KNXV-TV 15",
+        "cbs": "KPHO-TV 5",
+        "nbc": "KPNX 12",
+        "fox": "KSAZ-TV 10",
+        "cw": "KASW 61",
+        "pbs": "KAET 8"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "seattle-tacoma-wa",
+      "name": "Seattle-Tacoma, WA",
+      "slug": "seattle-tacoma-wa",
+      "city": "Seattle",
+      "state": "WA",
+      "dmaRank": 12,
+      "localAffiliates": {
+        "abc": "KOMO-TV 4",
+        "cbs": "KIRO-TV 7",
+        "nbc": "KING-TV 5",
+        "fox": "KCPQ 13",
+        "cw": "KSTW 11",
+        "pbs": "KCTS-TV 9"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "tampa-st-petersburg-fl",
+      "name": "Tampa-St. Petersburg, FL",
+      "slug": "tampa-st-petersburg-fl",
+      "city": "Tampa",
+      "state": "FL",
+      "dmaRank": 13,
+      "localAffiliates": {
+        "abc": "WFTS-TV 28",
+        "cbs": "WTSP 10",
+        "nbc": "WFLA-TV 8",
+        "fox": "WTVT 13",
+        "cw": "WTOG 44",
+        "pbs": "WEDU 3"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "minneapolis-st-paul-mn",
+      "name": "Minneapolis-St. Paul, MN",
+      "slug": "minneapolis-st-paul-mn",
+      "city": "Minneapolis",
+      "state": "MN",
+      "dmaRank": 14,
+      "localAffiliates": {
+        "abc": "KSTP-TV 5",
+        "cbs": "WCCO-TV 4",
+        "nbc": "KARE 11",
+        "fox": "KMSP-TV 9",
+        "cw": "WUCW 23",
+        "pbs": "TPT 2"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "detroit-mi",
+      "name": "Detroit, MI",
+      "slug": "detroit-mi",
+      "city": "Detroit",
+      "state": "MI",
+      "dmaRank": 15,
+      "localAffiliates": {
+        "abc": "WXYZ-TV 7",
+        "cbs": "WWJ-TV 62",
+        "nbc": "WDIV-TV 4",
+        "fox": "WJBK 2",
+        "cw": "WKBD-TV 50",
+        "pbs": "WTVS 56"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "denver-co",
+      "name": "Denver, CO",
+      "slug": "denver-co",
+      "city": "Denver",
+      "state": "CO",
+      "dmaRank": 16,
+      "localAffiliates": {
+        "abc": "KMGH-TV 7",
+        "cbs": "KCNC-TV 4",
+        "nbc": "KUSA 9",
+        "fox": "KDVR 31",
+        "cw": "KWGN-TV 2",
+        "pbs": "Rocky Mountain PBS"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "orlando-fl",
+      "name": "Orlando-Daytona Beach, FL",
+      "slug": "orlando-fl",
+      "city": "Orlando",
+      "state": "FL",
+      "dmaRank": 17,
+      "localAffiliates": {
+        "abc": "WFTV 9",
+        "cbs": "WKMG-TV 6",
+        "nbc": "WESH 2",
+        "fox": "WOFL 35",
+        "cw": "WKCF 18",
+        "pbs": "WUCF-TV 24"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": true, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "cleveland-oh",
+      "name": "Cleveland-Akron, OH",
+      "slug": "cleveland-oh",
+      "city": "Cleveland",
+      "state": "OH",
+      "dmaRank": 18,
+      "localAffiliates": {
+        "abc": "WEWS-TV 5",
+        "cbs": "WOIO 19",
+        "nbc": "WKYC 3",
+        "fox": "WJW 8",
+        "cw": "WUAB 43",
+        "pbs": "WVIZ 25"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "sacramento-ca",
+      "name": "Sacramento-Stockton, CA",
+      "slug": "sacramento-ca",
+      "city": "Sacramento",
+      "state": "CA",
+      "dmaRank": 19,
+      "localAffiliates": {
+        "abc": "KXTV 10",
+        "cbs": "KOVR 13",
+        "nbc": "KCRA-TV 3",
+        "fox": "KTXL 40",
+        "cw": "KMAX-TV 31",
+        "pbs": "KVIE 6"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "charlotte-nc",
+      "name": "Charlotte, NC",
+      "slug": "charlotte-nc",
+      "city": "Charlotte",
+      "state": "NC",
+      "dmaRank": 20,
+      "localAffiliates": {
+        "abc": "WSOC-TV 9",
+        "cbs": "WBTV 3",
+        "nbc": "WCNC-TV 36",
+        "fox": "WJZY 46",
+        "cw": "WAXN-TV 64",
+        "pbs": "WTVI / PBS Charlotte"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "portland-or",
+      "name": "Portland, OR",
+      "slug": "portland-or",
+      "city": "Portland",
+      "state": "OR",
+      "dmaRank": 21,
+      "localAffiliates": {
+        "abc": "KATU 2",
+        "cbs": "KOIN 6",
+        "nbc": "KGW 8",
+        "fox": "KPTV 12",
+        "cw": "KRCW-TV 32",
+        "pbs": "OPB 10"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "st-louis-mo",
+      "name": "St. Louis, MO",
+      "slug": "st-louis-mo",
+      "city": "St. Louis",
+      "state": "MO",
+      "dmaRank": 22,
+      "localAffiliates": {
+        "abc": "KDNL-TV 30",
+        "cbs": "KMOV 4",
+        "nbc": "KSDK 5",
+        "fox": "KTVI 2",
+        "cw": "KPLR-TV 11",
+        "pbs": "Nine PBS 9"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "indianapolis-in",
+      "name": "Indianapolis, IN",
+      "slug": "indianapolis-in",
+      "city": "Indianapolis",
+      "state": "IN",
+      "dmaRank": 23,
+      "localAffiliates": {
+        "abc": "WRTV 6",
+        "cbs": "WTTV 4",
+        "nbc": "WTHR 13",
+        "fox": "WXIN 59",
+        "cw": "WISH-TV 8",
+        "pbs": "WFYI 20"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "pittsburgh-pa",
+      "name": "Pittsburgh, PA",
+      "slug": "pittsburgh-pa",
+      "city": "Pittsburgh",
+      "state": "PA",
+      "dmaRank": 24,
+      "localAffiliates": {
+        "abc": "WTAE-TV 4",
+        "cbs": "KDKA-TV 2",
+        "nbc": "WPXI 11",
+        "fox": "WPGH-TV 53",
+        "cw": "WPCW 19",
+        "pbs": "WQED 13"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    },
+    {
+      "id": "baltimore-md",
+      "name": "Baltimore, MD",
+      "slug": "baltimore-md",
+      "city": "Baltimore",
+      "state": "MD",
+      "dmaRank": 25,
+      "localAffiliates": {
+        "abc": "WMAR-TV 2",
+        "cbs": "WJZ-TV 13",
+        "nbc": "WBAL-TV 11",
+        "fox": "WBFF 45",
+        "cw": "WNUV 54",
+        "pbs": "MPT / WMPB 67"
+      },
+      "availability": {
+        "youtube-tv": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": true },
+        "hulu-live": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "fubo": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "directv-stream": { "abc": true, "cbs": true, "nbc": true, "fox": true, "cw": true, "pbs": false },
+        "sling-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "philo": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false },
+        "frndly-tv": { "abc": false, "cbs": false, "nbc": false, "fox": false, "cw": false, "pbs": false }
+      }
+    }
+  ]
+}

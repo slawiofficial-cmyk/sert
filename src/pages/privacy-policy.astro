@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../lib/seo';
+
+const meta = generatePageMeta('trust', { title: 'Privacy Policy', slug: 'privacy-policy' });
+const breadcrumbs = [
+  { name: 'Editorial', url: '/about/' },
+  { name: 'Privacy Policy', url: '/privacy-policy/' }
+];
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+    <LastUpdated date="October 1, 2026" />
+
+    <div class="space-y-6 text-[#1A1A1A] leading-relaxed text-sm mt-6">
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        Privacy Policy
+      </h1>
+      <p class="text-[#5C5C5C]">Effective Date: October 1, 2026</p>
+
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mt-6">Cookie-Free Architecture</h2>
+      <p>
+        LiveTVStreaming.services is engineered with a privacy-first, cookie-free static framework. We do not set third-party tracking cookies or sell your personal data.
+      </p>
+
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mt-6">Information We Collect</h2>
+      <p>
+        When you use our Channel Finder tool, all calculations execute entirely client-side in your web browser. Your selected channels are stored in your URL parameter (?ch=...) for your own convenience and sharing; they are not sent to any database.
+      </p>
+
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mt-6">Outbound Links</h2>
+      <p>
+        When clicking external links to streaming services, you will be directed to the third party's website governed by their own privacy policies.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

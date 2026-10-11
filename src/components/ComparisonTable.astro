@@ -1,0 +1,187 @@
+---
+import type { StreamingService } from '../types';
+import Button from './Button.astro';
+import ServiceCompareCard from './ServiceCompareCard.astro';
+import Price from './Price.astro';
+import DataNotice from './DataNotice.astro';
+import { fourKLabel, getTrackedShort } from '../lib/coverage';
+
+interface Props {
+  services: StreamingService[];
+  highlightedServiceId?: string;
+}
+
+const { services, highlightedServiceId } = Astro.props;
+---
+
+<div class="my-8">
+  <!-- Section Subtitle / Header -->
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <div class="flex items-center gap-2 text-xs text-[#5C5C5C]">
+      <span>Table View:</span>
+      <span class="font-medium text-[#1A1A1A]">Ranked by Editorial Score</span>
+    </div>
+  </div>
+
+  <!-- Mobile Card List (below 768px): block md:hidden, no horizontal scroll -->
+  <div class="block md:hidden space-y-3">
+    {services.map((svc, idx) => (
+      <ServiceCompareCard
+        service={svc}
+        isRankOne={idx === 0 || svc.id === highlightedServiceId}
+      />
+    ))}
+  </div>
+
+  <!-- Desktop Table (768px and up): hidden md:block, table-layout fixed, no min-w-[760px] wrapper -->
+  <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+    <table class="w-full text-left text-xs border-collapse table-fixed">
+      <colgroup>
+        <col class="w-[19%]" />
+        <col class="w-[17%]" />
+        <col class="w-[9%]" />
+        <col class="w-[13%]" />
+        <col class="w-[7%]" />
+        <col class="w-[6%]" />
+        <col class="w-[7%]" />
+        <col class="w-[8%]" />
+        <col class="w-[14%]" />
+      </colgroup>
+      <thead class="sticky top-0 z-10 bg-[#FAF8F5]">
+        <tr class="border-b border-[#E7E2DA] text-[#1A1A1A]">
+          <th scope="col" class="py-3 px-3.5 font-semibold text-xs border-r border-[#E7E2DA]">
+            Service
+          </th>
+          <th scope="col" class="py-3 px-3 font-semibold">
+            Price
+          </th>
+          <th scope="col" class="py-3 px-3 font-semibold">
+            Key channels tracked
+          </th>
+          <th scope="col" class="py-3 px-3 font-semibold">
+            Cloud DVR
+          </th>
+          <th scope="col" class="py-3 px-2 font-semibold">
+            Streams
+          </th>
+          <th scope="col" class="py-3 px-2 font-semibold">
+            Trial
+          </th>
+          <th scope="col" class="py-3 px-2 font-semibold">
+            4K
+          </th>
+          <th scope="col" class="py-3 px-2 font-semibold">
+            Contract
+          </th>
+          <th scope="col" class="py-3 px-2 font-semibold text-center">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#E7E2DA]">
+        {services.map((svc) => {
+          const isHighlight = svc.id === highlightedServiceId;
+
+          return (
+            <tr
+              class={`hover:bg-stone-50/75 transition-colors ${
+                isHighlight ? 'bg-amber-50/40' : ''
+              }`}
+            >
+              <!-- First Column: Service Name & Rating -->
+              <td class="py-3 px-3.5 border-r border-[#E7E2DA] align-top">
+                <div class="font-semibold text-sm text-[#1A1A1A]">
+                  <a
+                    href={`/services/${svc.slug}/`}
+                    class="hover:text-[#0F5C4A] hover:underline"
+                  >
+                    {svc.name}
+                  </a>
+                </div>
+                <div class="text-[11px] text-[#5C5C5C] flex flex-wrap items-center gap-1.5 mt-0.5">
+                  <span class="text-[#0F5C4A] font-semibold tabular-nums whitespace-nowrap">
+                    ★ {svc.editorialRating.toFixed(1)}
+                  </span>
+                  <span>·</span>
+                  <span class="text-stone-500 break-words">{svc.bestFor}</span>
+                </div>
+              </td>
+
+              <!-- Monthly Price -->
+              <td class="py-3 px-3 tabular-nums align-top">
+                <Price service={svc} size="sm" showPlan={true} />
+              </td>
+
+              <!-- Key channels tracked (a sample of the full lineup) -->
+              <td class="py-3 px-3 font-medium text-[#1A1A1A] tabular-nums align-top whitespace-nowrap">
+                {getTrackedShort(svc)}
+              </td>
+
+              <!-- Cloud DVR -->
+              <td class="py-3 px-3 text-[#1A1A1A] align-top break-words">
+                {svc.dvrStorage}
+              </td>
+
+              <!-- Streams -->
+              <td class="py-3 px-2 tabular-nums text-[#1A1A1A] align-top whitespace-nowrap">
+                {svc.simultaneousStreams} scrn
+              </td>
+
+              <!-- Free Trial -->
+              <td class="py-3 px-2 align-top whitespace-nowrap">
+                {svc.freeTrialDays > 0 ? (
+                  <span class="font-medium text-[#0F5C4A]">
+                    {svc.freeTrialDays}d
+                  </span>
+                ) : (
+                  <span class="text-[#5C5C5C]">–</span>
+                )}
+              </td>
+
+              <!-- 4K Support -->
+              <td class="py-3 px-2 align-top whitespace-nowrap">
+                {svc.supports4K ? (
+                  <span class="inline-flex items-center text-[#0F5C4A] font-semibold" title="Available">
+                    ✓
+                  </span>
+                ) : (
+                  <span class="text-stone-400 font-semibold" title={fourKLabel(svc)}>
+                    {fourKLabel(svc) === 'Add-on only' ? 'Add-on' : '–'}
+                  </span>
+                )}
+              </td>
+
+              <!-- Contract -->
+              <td class="py-3 px-2 text-[#5C5C5C] align-top break-words">
+                {svc.contractRequired ? '12-24 mo' : 'None'}
+              </td>
+
+              <!-- Action / CTA -->
+              <td class="py-3 px-2 align-top">
+                <Button
+                  href={svc.priceSourceUrl}
+                  variant="primary"
+                  size="sm"
+                  fullWidth={true}
+                  showArrow={false}
+                  class="justify-center text-center whitespace-nowrap"
+                  ariaLabel={`Get ${svc.shortName || svc.name} official subscription`}
+                >
+                  <span>Get {svc.shortName || svc.name}</span>
+                </Button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-2 text-[11px] text-[#5C5C5C] flex flex-col sm:flex-row justify-between gap-2">
+    <div class="space-y-1">
+      <p>* Prices are for the plan named under each price. Promotions are secondary and temporary. &ldquo;Key channels tracked&rdquo; counts the channels we monitor out of the provider&rsquo;s approximate lineup size.</p>
+      <DataNotice kind="both" variant="footnote" />
+    </div>
+    <span>Status legend: <strong class="text-[#0F5C4A]">✓ Included</strong> &nbsp;|&nbsp; <strong class="text-stone-400">– Excluded / Not Supported</strong></span>
+  </div>
+</div>

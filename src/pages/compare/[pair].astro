@@ -1,0 +1,508 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import Price from '../../components/Price.astro';
+import DataNotice from '../../components/DataNotice.astro';
+
+import { getAllComparisonPairs, compareTwoServices, getTrackedShort, getMainPrice, formatUsd } from '../../lib/coverage';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema, generateFAQSchema, hashString } from '../../lib/seo';
+import type { StreamingService, FAQItem } from '../../types';
+
+export function getStaticPaths() {
+  const pairs = getAllComparisonPairs();
+  return pairs.map(({ a, b, slug }) => ({
+    params: { pair: slug },
+    props: { serviceA: a, serviceB: b, slug }
+  }));
+}
+
+interface Props {
+  serviceA: StreamingService;
+  serviceB: StreamingService;
+  slug: string;
+}
+
+const { serviceA, serviceB, slug } = Astro.props;
+
+const comparison = compareTwoServices(serviceA.id, serviceB.id);
+if (!comparison) {
+  throw new Error(`Comparison data missing for ${slug}`);
+}
+
+const { onlyInA, onlyInB, inBoth, priceDiff } = comparison;
+
+// Compute category winners
+const sportsScoreA = onlyInA.filter((c) => c.category === 'sports').length;
+const sportsScoreB = onlyInB.filter((c) => c.category === 'sports').length;
+const sportsWinner = sportsScoreA >= sportsScoreB ? serviceA : serviceB;
+
+const priceWinner = getMainPrice(serviceA) <= getMainPrice(serviceB) ? serviceA : serviceB;
+const ratingWinner = serviceA.editorialRating >= serviceB.editorialRating ? serviceA : serviceB;
+
+// Deterministic copy variations by slug hash
+const hash = hashString(`${serviceA.slug}-${serviceB.slug}`);
+const verdictTextVariants = [
+  `For most viewers, ${ratingWinner.name} is the superior choice due to its better balance of channel variety, reliable streaming playback, and user-friendly cloud DVR. However, if staying under budget is your paramount concern, ${priceWinner.name} saves you roughly ${formatUsd(Math.abs(priceDiff))} every month (approximate, before fees and promotions).`,
+  `Our editorial testing gives the edge to ${ratingWinner.name} for overall household entertainment. If your viewing relies on sports like ESPN and FS1, examine the exclusive lineups carefully, as ${sportsWinner.name} holds a noticeable advantage in athletic carriage.`,
+  `Choosing between ${serviceA.name} and ${serviceB.name} comes down to channels versus price. ${ratingWinner.name} earns our highest editorial recommendation, while ${priceWinner.name} remains the more affordable cord-cutting bundle.`
+];
+const verdictSummary = verdictTextVariants[hash % verdictTextVariants.length];
+
+const compareFaqs: FAQItem[] = [
+  {
+    question: `Is ${serviceA.name} better than ${serviceB.name}?`,
+    answer: verdictSummary
+  },
+  {
+    question: `What channels does ${serviceA.name} have that ${serviceB.name} doesn't?`,
+    answer: onlyInA.length > 0
+      ? `Among the channels we track, ${serviceA.name} carries ${onlyInA.length} that ${serviceB.name} does not, including ${onlyInA.slice(0, 4).map((c) => c.name).join(', ')}. This is a sample, not a full lineup comparison.`
+      : `Among the channels we track, ${serviceA.name} has none that are absent from ${serviceB.name}.`
+  },
+  {
+    question: `Which is cheaper: ${serviceA.name} or ${serviceB.name}?`,
+    answer: priceDiff > 0
+      ? `${serviceB.name} is cheaper at about ${formatUsd(serviceB.monthlyPrice)}/mo (${serviceB.planName}) compared to ${serviceA.name}'s ${formatUsd(serviceA.monthlyPrice)}/mo (${serviceA.planName}), a difference of roughly ${formatUsd(priceDiff)} per month before fees and promotions.`
+      : `${serviceA.name} is cheaper at about ${formatUsd(serviceA.monthlyPrice)}/mo (${serviceA.planName}) compared to ${serviceB.name}'s ${formatUsd(serviceB.monthlyPrice)}/mo (${serviceB.planName}), a difference of roughly ${formatUsd(Math.abs(priceDiff))} per month before fees and promotions.`
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Comparisons', url: '/compare/' },
+  { name: `${serviceA.name} vs ${serviceB.name}`, url: `/compare/${slug}/` }
+];
+
+const meta = generatePageMeta('compare', {
+  a: serviceA.name,
+  b: serviceB.name,
+  slug
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateFAQSchema(compareFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <LastUpdated />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs text-[#0F5C4A] font-semibold">Direct Head-to-Head</span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        {serviceA.name} vs. {serviceB.name} (2026 Comparison)
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        Comparing prices, exclusive channel carriage, cloud DVR storage, and stream limits. See which provider offers superior value for your cord-cutting budget.
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Quick Verdict Banner -->
+    <div class="my-8 bg-white border border-[#E7E2DA] rounded p-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#C2410C]">
+          Editor's Verdict
+        </span>
+        <span class="text-stone-300">·</span>
+        <span class="text-xs text-[#5C5C5C]">Overall Winner: <strong>{ratingWinner.name}</strong></span>
+      </div>
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-2">
+        The Bottom Line: {ratingWinner.name} Wins Overall
+      </h2>
+      <p class="text-sm text-[#5C5C5C] leading-relaxed max-w-4xl">
+        {verdictSummary}
+      </p>
+    </div>
+
+    <!-- Side-by-Side Comparison Matrix -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        Side-by-Side Feature Comparison
+      </h2>
+
+      <!-- Mobile Feature Cards (Below 768px): block md:hidden -->
+      <div class="block md:hidden space-y-3">
+        <!-- Monthly Rate Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Monthly Rate</span>
+            {priceWinner && (
+              <span class="text-[10px] font-semibold text-[#0F5C4A] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                {priceWinner.shortName} cheaper
+              </span>
+            )}
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-start gap-3">
+              <span class="text-[#5C5C5C]">{serviceA.name}:</span>
+              <Price service={serviceA} size="sm" showPlan={true} align="right" fees="all" />
+            </div>
+            <div class="flex justify-between items-start gap-3">
+              <span class="text-[#5C5C5C]">{serviceB.name}:</span>
+              <Price service={serviceB} size="sm" showPlan={true} align="right" fees="all" />
+            </div>
+            <DataNotice kind="prices" class="pt-1" />
+          </div>
+        </div>
+
+        <!-- Editorial Score Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Editorial Score</span>
+            <span class="text-[10px] font-semibold text-[#0F5C4A] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              {ratingWinner.shortName} leads
+            </span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceA.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">★ {serviceA.editorialRating.toFixed(1)} / 5.0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceB.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">★ {serviceB.editorialRating.toFixed(1)} / 5.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel Count Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="flex items-center justify-between border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Key channels tracked</span>
+            <span class="text-[10px] font-semibold text-[#0F5C4A] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              {serviceA.channelCount >= serviceB.channelCount ? serviceA.shortName : serviceB.shortName} larger lineup
+            </span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceA.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">{getTrackedShort(serviceA)}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceB.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">{getTrackedShort(serviceB)}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cloud DVR Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Cloud DVR</span>
+          </div>
+          <div class="space-y-2 pt-1">
+            <div>
+              <span class="text-[#5C5C5C] block text-[11px]">{serviceA.name}:</span>
+              <span class="font-medium text-[#1A1A1A] [overflow-wrap:anywhere]">{serviceA.dvrStorage}</span>
+            </div>
+            <div>
+              <span class="text-[#5C5C5C] block text-[11px]">{serviceB.name}:</span>
+              <span class="font-medium text-[#1A1A1A] [overflow-wrap:anywhere]">{serviceB.dvrStorage}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simultaneous Screens Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Simultaneous Screens</span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceA.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">{serviceA.simultaneousStreams} screens</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceB.name}:</span>
+              <span class="font-semibold text-[#1A1A1A] tabular-nums">{serviceB.simultaneousStreams} screens</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Free Trial Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 text-xs">
+          <div class="border-b border-stone-100 pb-2 mb-2">
+            <span class="font-editorial text-base font-bold text-[#1A1A1A]">Free Trial</span>
+          </div>
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceA.name}:</span>
+              <span class="font-semibold text-[#1A1A1A]">
+                {serviceA.freeTrialDays > 0 ? `${serviceA.freeTrialDays} Days Free` : 'No standard trial'}
+              </span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-[#5C5C5C]">{serviceB.name}:</span>
+              <span class="font-semibold text-[#1A1A1A]">
+                {serviceB.freeTrialDays > 0 ? `${serviceB.freeTrialDays} Days Free` : 'No standard trial'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTAs Card -->
+        <div class="bg-white border border-[#E7E2DA] rounded-[6px] p-4 space-y-2.5">
+          <CTAButton
+            href={serviceA.priceSourceUrl}
+            serviceName={serviceA.name}
+            shortName={serviceA.shortName}
+            class="w-full"
+          />
+          <CTAButton
+            href={serviceB.priceSourceUrl}
+            serviceName={serviceB.name}
+            shortName={serviceB.shortName}
+            variant="secondary"
+            class="w-full"
+          />
+        </div>
+      </div>
+
+      <!-- Desktop Side-by-Side Matrix (768px+): hidden md:block -->
+      <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+        <table class="w-full text-left text-xs border-collapse table-fixed">
+          <colgroup>
+            <col class="w-[34%]" />
+            <col class="w-[33%]" />
+            <col class="w-[33%]" />
+          </colgroup>
+          <thead>
+            <tr class="bg-[#FAF8F5] border-b border-[#E7E2DA]">
+              <th class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Feature</th>
+              <th class="py-3.5 px-4 font-semibold text-[#1A1A1A] text-center border-x border-[#E7E2DA]">
+                <a
+                  href={`/services/${serviceA.slug}/`}
+                  class="hover:text-[#0F5C4A] text-sm font-bold block"
+                >
+                  {serviceA.name}
+                </a>
+              </th>
+              <th class="py-3.5 px-4 font-semibold text-[#1A1A1A] text-center">
+                <a
+                  href={`/services/${serviceB.slug}/`}
+                  class="hover:text-[#0F5C4A] text-sm font-bold block"
+                >
+                  {serviceB.name}
+                </a>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E7E2DA]">
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Monthly Rate</td>
+              <td class="py-3.5 px-4 text-center border-x border-[#E7E2DA] tabular-nums">
+                <Price service={serviceA} size="sm" showPlan={true} fees="all" class="inline-block text-left" />
+                {priceWinner.id === serviceA.id && (
+                  <span class="block text-[10px] text-[#0F5C4A] font-sans font-semibold">Cheaper</span>
+                )}
+              </td>
+              <td class="py-3.5 px-4 text-center tabular-nums">
+                <Price service={serviceB} size="sm" showPlan={true} fees="all" class="inline-block text-left" />
+                {priceWinner.id === serviceB.id && (
+                  <span class="block text-[10px] text-[#0F5C4A] font-sans font-semibold">Cheaper</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Editorial Score</td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] border-x border-[#E7E2DA] tabular-nums font-semibold">
+                ★ {serviceA.editorialRating.toFixed(1)} / 5.0
+              </td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] tabular-nums font-semibold">
+                ★ {serviceB.editorialRating.toFixed(1)} / 5.0
+              </td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Key channels tracked</td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] border-x border-[#E7E2DA] tabular-nums">
+                {getTrackedShort(serviceA)}
+              </td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] tabular-nums">
+                {getTrackedShort(serviceB)}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Cloud DVR</td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] border-x border-[#E7E2DA] break-words">
+                {serviceA.dvrStorage}
+              </td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] break-words">
+                {serviceB.dvrStorage}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Simultaneous Screens</td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] border-x border-[#E7E2DA] tabular-nums">
+                {serviceA.simultaneousStreams} screens
+              </td>
+              <td class="py-3.5 px-4 text-center text-[#1A1A1A] tabular-nums">
+                {serviceB.simultaneousStreams} screens
+              </td>
+            </tr>
+            <tr>
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Free Trial</td>
+              <td class="py-3.5 px-4 text-center border-x border-[#E7E2DA]">
+                {serviceA.freeTrialDays > 0 ? `${serviceA.freeTrialDays} Days Free` : 'No standard trial'}
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                {serviceB.freeTrialDays > 0 ? `${serviceB.freeTrialDays} Days Free` : 'No standard trial'}
+              </td>
+            </tr>
+            <tr class="bg-[#FAF8F5]">
+              <td class="py-3.5 px-4 font-semibold text-[#5C5C5C]">Official Site</td>
+              <td class="py-3.5 px-4 text-center border-x border-[#E7E2DA]">
+                <CTAButton
+                  href={serviceA.priceSourceUrl}
+                  serviceName={serviceA.name}
+                  shortName={serviceA.shortName}
+                  size="sm"
+                />
+              </td>
+              <td class="py-3.5 px-4 text-center">
+                <CTAButton
+                  href={serviceB.priceSourceUrl}
+                  serviceName={serviceB.name}
+                  shortName={serviceB.shortName}
+                  size="sm"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <DataNotice kind="both" variant="footnote" class="px-4 py-3 border-t border-[#E7E2DA]" />
+      </div>
+    </section>
+
+    <!-- Ad slot -->
+    <AdSlot slotId="compare-mid" format="leaderboard" />
+
+    <!-- Channel Difference Analysis: Only on A vs Only on B -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        Channel Differences Among the Channels We Track
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Only on A -->
+        <div class="bg-white border border-[#E7E2DA] rounded p-5">
+          <h3 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-2 flex items-center justify-between">
+            <span>Among the channels we track: only on {serviceA.name}</span>
+            <span class="text-xs text-[#5C5C5C] font-normal font-sans">
+              {onlyInA.length} channels
+            </span>
+          </h3>
+          <p class="text-xs text-[#5C5C5C] mb-4">
+            Among the channels we track, these are on {serviceA.name} but not on {serviceB.name}. Each provider carries more channels than we list.
+          </p>
+          {onlyInA.length > 0 ? (
+            <div class="flex flex-wrap gap-1.5">
+              {onlyInA.map((ch) => (
+                <a
+                  href={`/channels/${ch.slug}/`}
+                  class="px-2.5 py-1 rounded bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#0F5C4A] text-xs text-[#1A1A1A] transition-colors"
+                >
+                  {ch.name}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p class="text-xs text-stone-500 italic">No exclusive tracked channels found.</p>
+          )}
+        </div>
+
+        <!-- Only on B -->
+        <div class="bg-white border border-[#E7E2DA] rounded p-5">
+          <h3 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-2 flex items-center justify-between">
+            <span>Among the channels we track: only on {serviceB.name}</span>
+            <span class="text-xs text-[#5C5C5C] font-normal font-sans">
+              {onlyInB.length} channels
+            </span>
+          </h3>
+          <p class="text-xs text-[#5C5C5C] mb-4">
+            Among the channels we track, these are on {serviceB.name} but not on {serviceA.name}. Each provider carries more channels than we list.
+          </p>
+          {onlyInB.length > 0 ? (
+            <div class="flex flex-wrap gap-1.5">
+              {onlyInB.map((ch) => (
+                <a
+                  href={`/channels/${ch.slug}/`}
+                  class="px-2.5 py-1 rounded bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#0F5C4A] text-xs text-[#1A1A1A] transition-colors"
+                >
+                  {ch.name}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p class="text-xs text-stone-500 italic">No exclusive tracked channels found.</p>
+          )}
+        </div>
+      </div>
+
+      <!-- In Both Services -->
+      <div class="mt-6 bg-white border border-[#E7E2DA] rounded p-5">
+        <h3 class="font-editorial text-base font-bold text-[#1A1A1A] mb-2">
+          Among the channels we track: on both {serviceA.name} and {serviceB.name}
+        </h3>
+        <p class="text-xs text-[#5C5C5C] mb-3">
+          {inBoth.length} tracked channels appear on both platforms:
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          {inBoth.map((ch) => (
+            <span class="px-2 py-0.5 rounded bg-stone-50 border border-[#E7E2DA] text-[11px] text-[#5C5C5C]">
+              {ch.name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={compareFaqs} title={`FAQs: ${serviceA.name} vs. ${serviceB.name}`} />
+
+    <!-- Internal Links -->
+    <RelatedLinks
+      title="Other Head-to-Head Comparisons"
+      links={[
+        {
+          title: `${serviceA.name} Reviews & Lineup`,
+          url: `/services/${serviceA.slug}/`,
+          description: `Full standalone editorial testing and channel specs for ${serviceA.name}.`
+        },
+        {
+          title: `${serviceB.name} Reviews & Lineup`,
+          url: `/services/${serviceB.slug}/`,
+          description: `Full standalone editorial testing and channel specs for ${serviceB.name}.`
+        },
+        {
+          title: 'Browse All 21 Pairwise Comparisons',
+          url: '/compare/',
+          description: 'Explore side-by-side matrices across all US live TV streaming providers.'
+        }
+      ]}
+      hubUrl="/compare/"
+      hubLabel="All Comparisons &rarr;"
+    />
+  </div>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import { dataMeta } from '../lib/coverage';
+
+interface Props {
+  /** What the surrounding block shows. */
+  kind?: 'prices' | 'channels' | 'both';
+  /** inline = one short line; footnote = the line plus the data disclaimer text. */
+  variant?: 'inline' | 'footnote';
+  class?: string;
+}
+
+const { kind = 'prices', variant = 'inline', class: className = '' } = Astro.props;
+
+const disclaimers = [
+  kind !== 'channels' ? dataMeta.priceDisclaimer : '',
+  kind !== 'prices' ? dataMeta.channelDisclaimer : ''
+].filter(Boolean);
+---
+
+<div class={`text-[11px] leading-relaxed text-[#5C5C5C] ${className}`}>
+  <p>
+    {kind === 'channels' ? 'Channel lists approx. as of' : 'Prices approx. as of'}
+    <time datetime={dataMeta.lastVerified} class="font-medium text-[#1A1A1A]">{dataMeta.lastVerifiedLabel}</time>.
+    {kind === 'both' && <span> Channel lists are a sample, not full lineups.</span>}
+    {kind !== 'channels' && <span> Confirm the final price at checkout.</span>}
+  </p>
+  {variant === 'footnote' && disclaimers.length > 0 && (
+    <p class="mt-1">
+      {disclaimers.map((text, idx) => (
+        <span>{idx > 0 ? ' ' : ''}{text}</span>
+      ))}
+    </p>
+  )}
+</div>

@@ -1,0 +1,186 @@
+---
+// Header.astro - Pure semantic HTML with vanilla TypeScript mobile menu
+import { dataMeta } from '../lib/coverage';
+
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { label: 'Channel Finder', path: '/#finder' },
+  { label: 'Services', path: '/services/' },
+  { label: 'Compare', path: '/compare/' },
+  { label: 'Channels', path: '/channels/' },
+  { label: 'Local TV', path: '/local/' },
+  { label: 'Sports', path: '/watch/' },
+  { label: 'Devices', path: '/devices/' }
+];
+---
+
+<header class="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-xs hairline-b">
+  <!-- Top micro-bar: Editorial trust indicator -->
+  <div class="bg-[#FAF8F5] hairline-b py-1.5 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-[#5C5C5C]">
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#0F5C4A] shrink-0"></span>
+        <span>Independent editorial testing</span>
+        <span aria-hidden="true" class="hidden xs:inline">·</span>
+        <span class="text-[11px] sm:text-xs">Prices approx. as of {dataMeta.lastVerifiedLabel}</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-3">
+        <a
+          href="/how-we-test/"
+          class="hover:text-[#0F5C4A] underline-offset-2 hover:underline"
+        >
+          How We Test
+        </a>
+        <span aria-hidden="true">·</span>
+        <a
+          href="/affiliate-disclosure/"
+          class="hover:text-[#0F5C4A] underline-offset-2 hover:underline"
+        >
+          Affiliate Disclosure
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main navigation container -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <!-- Brand logo & tagline -->
+    <a
+      href="/"
+      class="flex items-baseline gap-2 group text-left focus-visible:outline-2 focus-visible:outline-[#0F5C4A]"
+      aria-label="LiveTVStreaming.services home"
+    >
+      <span class="font-editorial text-2xl sm:text-2xl font-bold tracking-tight text-[#1A1A1A] group-hover:text-[#0F5C4A] transition-colors">
+        LiveTVStreaming<span class="text-[#0F5C4A]">.services</span>
+      </span>
+      <span class="hidden lg:inline text-xs font-sans text-[#5C5C5C] font-normal pl-2 hairline-l">
+        Cord-Cutter's Directory
+      </span>
+    </a>
+
+    <!-- Desktop nav links -->
+    <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium text-[#1A1A1A]">
+      {navLinks.map((link) => {
+        const isActive = currentPath === link.path || (link.path !== '/' && link.path !== '/#finder' && currentPath.startsWith(link.path));
+        return (
+          <a
+            href={link.path}
+            class={`px-2.5 py-1.5 rounded text-sm transition-colors ${
+              isActive
+                ? 'text-[#0F5C4A] font-semibold bg-[#0F5C4A]/5'
+                : 'text-[#1A1A1A] hover:text-[#0F5C4A] hover:bg-stone-100/50'
+            }`}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Right side CTA & Mobile Menu Toggle -->
+    <div class="flex items-center gap-2">
+      <a
+        href="/#finder"
+        class="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-semibold text-white bg-[#0F5C4A] hover:bg-[#0c4739] rounded transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F5C4A]"
+      >
+        Find My Channels
+      </a>
+
+      <!-- Mobile hamburger toggle button (min 44x44px tap target) -->
+      <button
+        type="button"
+        id="mobile-menu-btn"
+        class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded border border-[#E7E2DA] bg-white text-[#1A1A1A] hover:bg-stone-50 focus-visible:outline-2 focus-visible:outline-[#0F5C4A]"
+        aria-expanded="false"
+        aria-controls="mobile-nav-dialog"
+        aria-label="Open main navigation"
+      >
+        <svg id="hamburger-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="close-icon" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Slide-Down Menu (Pure accessible vanilla JS) -->
+  <div
+    id="mobile-nav-dialog"
+    class="hidden md:hidden fixed inset-x-0 top-[97px] bottom-0 bg-[#FAF8F5] z-50 overflow-y-auto px-4 py-6 border-t border-[#E7E2DA] shadow-lg"
+  >
+    <div class="flex flex-col space-y-1">
+      {navLinks.map((link) => (
+        <a
+          href={link.path}
+          class="py-3 px-3 text-base font-medium text-[#1A1A1A] border-b border-[#E7E2DA]/60 hover:text-[#0F5C4A] hover:bg-white rounded transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="pt-4 flex flex-col gap-2">
+        <a
+          href="/#finder"
+          class="w-full text-center py-3 text-sm font-semibold text-white bg-[#0F5C4A] rounded"
+        >
+          Launch Channel Finder Tool
+        </a>
+        <div class="pt-4 text-xs text-[#5C5C5C] space-y-2">
+          <p>Independent consumer review & programmatic directory.</p>
+          <div class="flex gap-4">
+            <a href="/how-we-test/" class="underline">How We Test</a>
+            <a href="/editorial-policy/" class="underline">Editorial Policy</a>
+            <a href="/contact/" class="underline">Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Vanilla accessible menu controller
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const menuDialog = document.getElementById('mobile-nav-dialog');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  function toggleMenu() {
+    const isExpanded = menuBtn?.getAttribute('aria-expanded') === 'true';
+    const nextState = !isExpanded;
+    menuBtn?.setAttribute('aria-expanded', String(nextState));
+    menuBtn?.setAttribute('aria-label', nextState ? 'Close main navigation' : 'Open main navigation');
+
+    if (nextState) {
+      menuDialog?.classList.remove('hidden');
+      hamburgerIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      menuDialog?.classList.add('hidden');
+      hamburgerIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  menuBtn?.addEventListener('click', toggleMenu);
+
+  // Close on Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuBtn?.getAttribute('aria-expanded') === 'true') {
+      toggleMenu();
+    }
+  });
+
+  // Close when clicking a nav link in mobile menu
+  menuDialog?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (menuBtn?.getAttribute('aria-expanded') === 'true') {
+        toggleMenu();
+      }
+    });
+  });
+</script>

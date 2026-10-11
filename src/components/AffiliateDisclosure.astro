@@ -1,0 +1,21 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+{compact ? (
+  <p class="text-[11px] text-[#5C5C5C] leading-snug">
+    <span class="font-semibold text-stone-700">Editorial disclosure:</span> We may earn a commission when you click external links.{' '}
+    <a href="/affiliate-disclosure/" class="underline hover:text-[#0F5C4A]">Learn more</a>.
+  </p>
+) : (
+  <div class="bg-[#FAF8F5] border border-[#E7E2DA] rounded p-3.5 text-xs text-[#5C5C5C] my-4 leading-relaxed">
+    <strong class="text-[#1A1A1A] font-semibold">Independent Editorial Disclosure:</strong> livetvstreaming.services is an independently owned publication. When you purchase a live TV streaming plan through our links, we may receive compensation at no additional cost to you. Our testing methodologies, rankings, and verdicts are never influenced by affiliate partnerships.{' '}
+    <a href="/affiliate-disclosure/" class="text-[#0F5C4A] font-medium underline underline-offset-2">
+      Read full disclosure policy
+    </a>.
+  </div>
+)}

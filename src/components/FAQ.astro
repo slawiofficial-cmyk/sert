@@ -1,0 +1,80 @@
+---
+import type { FAQItem } from '../types';
+
+interface Props {
+  items: FAQItem[];
+  title?: string;
+}
+
+const { items, title = 'Frequently Asked Questions' } = Astro.props;
+---
+
+<section class="my-10" aria-labelledby="faq-heading">
+  <h2 id="faq-heading" class="font-editorial text-2xl sm:text-3xl font-bold text-[#1A1A1A] mb-6">
+    {title}
+  </h2>
+  <div class="border border-[#E7E2DA] rounded bg-white divide-y divide-[#E7E2DA] faq-accordion">
+    {items.map((item, idx) => {
+      const isFirst = idx === 0;
+      const buttonId = `faq-btn-${idx}`;
+      const contentId = `faq-content-${idx}`;
+
+      return (
+        <div class="faq-item transition-colors">
+          <h3>
+            <button
+              type="button"
+              id={buttonId}
+              aria-expanded={isFirst ? "true" : "false"}
+              aria-controls={contentId}
+              class="faq-toggle w-full text-left py-4 px-5 flex items-center justify-between gap-4 font-semibold text-sm text-[#1A1A1A] hover:text-[#0F5C4A] focus-visible:outline-2 focus-visible:outline-[#0F5C4A]"
+            >
+              <span class="leading-snug">{item.question}</span>
+              <span
+                aria-hidden="true"
+                class={`faq-icon text-lg font-mono text-[#5C5C5C] transition-transform duration-150 shrink-0 ${
+                  isFirst ? 'rotate-45 text-[#0F5C4A]' : ''
+                }`}
+              >
+                +
+              </span>
+            </button>
+          </h3>
+          <div
+            id={contentId}
+            role="region"
+            aria-labelledby={buttonId}
+            class={`faq-panel px-5 pb-5 pt-1 text-sm text-[#5C5C5C] leading-relaxed border-t border-stone-100/60 ${
+              isFirst ? '' : 'hidden'
+            }`}
+          >
+            <p>{item.answer}</p>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<script>
+  // Vanilla JS accessible accordion controller
+  document.querySelectorAll('.faq-accordion').forEach((accordion) => {
+    accordion.querySelectorAll('.faq-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        const panel = document.getElementById(btn.getAttribute('aria-controls') || '');
+        const icon = btn.querySelector('.faq-icon');
+
+        if (isExpanded) {
+          btn.setAttribute('aria-expanded', 'false');
+          panel?.classList.add('hidden');
+          icon?.classList.remove('rotate-45', 'text-[#0F5C4A]');
+        } else {
+          btn.setAttribute('aria-expanded', 'true');
+          panel?.classList.remove('hidden');
+          icon?.classList.add('rotate-45', 'text-[#0F5C4A]');
+        }
+      });
+    });
+  });
+</script>

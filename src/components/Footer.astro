@@ -1,0 +1,157 @@
+---
+// Footer.astro
+import { dataMeta } from '../lib/coverage';
+---
+
+<footer class="bg-white hairline-t mt-20 text-[#1A1A1A]">
+  <!-- Editorial Trust Statement -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 border-b border-[#E7E2DA]">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <span class="font-editorial text-lg font-bold text-[#1A1A1A] block mb-2">
+          100% Independent Analysis
+        </span>
+        <p class="text-sm text-[#5C5C5C] leading-relaxed">
+          We purchase and test every streaming subscription independently. Providers do not pay for placement, higher rankings, or favorable reviews.
+        </p>
+      </div>
+      <div>
+        <span class="font-editorial text-lg font-bold text-[#1A1A1A] block mb-2">
+          Monthly Carriage Audits
+        </span>
+        <p class="text-sm text-[#5C5C5C] leading-relaxed">
+          Our team verifies 300+ cable channel feeds and local station broadcast availability across all 210 US Nielsen DMAs every month.
+        </p>
+      </div>
+      <div>
+        <span class="font-editorial text-lg font-bold text-[#1A1A1A] block mb-2">
+          Reader-Supported Publishing
+        </span>
+        <p class="text-sm text-[#5C5C5C] leading-relaxed">
+          When you purchase a subscription through our verified links, we may receive an affiliate referral fee. This does not alter our editorial conclusions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Directory Columns -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 text-sm">
+      <!-- Col 1: Services -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          Services
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/services/youtube-tv/" class="hover:text-[#0F5C4A]">YouTube TV</a></li>
+          <li><a href="/services/hulu-live/" class="hover:text-[#0F5C4A]">Hulu + Live TV</a></li>
+          <li><a href="/services/sling-tv/" class="hover:text-[#0F5C4A]">Sling TV</a></li>
+          <li><a href="/services/fubo/" class="hover:text-[#0F5C4A]">Fubo</a></li>
+          <li><a href="/services/directv-stream/" class="hover:text-[#0F5C4A]">DirecTV Stream</a></li>
+          <li><a href="/services/philo/" class="hover:text-[#0F5C4A]">Philo</a></li>
+          <li><a href="/services/frndly-tv/" class="hover:text-[#0F5C4A]">Frndly TV</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2: Comparisons -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          Comparisons
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/compare/youtube-tv-vs-hulu-live/" class="hover:text-[#0F5C4A]">YouTube TV vs Hulu</a></li>
+          <li><a href="/compare/youtube-tv-vs-sling-tv/" class="hover:text-[#0F5C4A]">YouTube TV vs Sling</a></li>
+          <li><a href="/compare/youtube-tv-vs-fubo/" class="hover:text-[#0F5C4A]">YouTube TV vs Fubo</a></li>
+          <li><a href="/compare/hulu-live-vs-fubo/" class="hover:text-[#0F5C4A]">Hulu vs Fubo</a></li>
+          <li><a href="/compare/fubo-vs-directv-stream/" class="hover:text-[#0F5C4A]">Fubo vs DirecTV</a></li>
+          <li><a href="/compare/philo-vs-frndly-tv/" class="hover:text-[#0F5C4A]">Philo vs Frndly</a></li>
+          <li><a href="/compare/" class="text-[#0F5C4A] font-medium hover:underline">All 21 Comparisons &rarr;</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Channels -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          Channels
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/channels/espn/" class="hover:text-[#0F5C4A]">ESPN Live</a></li>
+          <li><a href="/channels/fs1/" class="hover:text-[#0F5C4A]">FS1 (Fox Sports)</a></li>
+          <li><a href="/channels/tnt/" class="hover:text-[#0F5C4A]">TNT</a></li>
+          <li><a href="/channels/cnn/" class="hover:text-[#0F5C4A]">CNN</a></li>
+          <li><a href="/channels/hgtv/" class="hover:text-[#0F5C4A]">HGTV</a></li>
+          <li><a href="/channels/hallmark-channel/" class="hover:text-[#0F5C4A]">Hallmark</a></li>
+          <li><a href="/channels/" class="text-[#0F5C4A] font-medium hover:underline">Channel Directory &rarr;</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Local Markets -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          Local Markets
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/local/new-york-ny/" class="hover:text-[#0F5C4A]">New York, NY</a></li>
+          <li><a href="/local/los-angeles-ca/" class="hover:text-[#0F5C4A]">Los Angeles, CA</a></li>
+          <li><a href="/local/chicago-il/" class="hover:text-[#0F5C4A]">Chicago, IL</a></li>
+          <li><a href="/local/dallas-fort-worth-tx/" class="hover:text-[#0F5C4A]">Dallas-Ft. Worth, TX</a></li>
+          <li><a href="/local/atlanta-ga/" class="hover:text-[#0F5C4A]">Atlanta, GA</a></li>
+          <li><a href="/local/" class="text-[#0F5C4A] font-medium hover:underline">Top 25 DMAs &rarr;</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 5: Sports Broadcasts -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          Sports Broadcasts
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/watch/nfl/dallas-cowboys/" class="hover:text-[#0F5C4A]">Dallas Cowboys</a></li>
+          <li><a href="/watch/nfl/kansas-city-chiefs/" class="hover:text-[#0F5C4A]">KC Chiefs</a></li>
+          <li><a href="/watch/nba/boston-celtics/" class="hover:text-[#0F5C4A]">Boston Celtics</a></li>
+          <li><a href="/watch/nba/los-angeles-lakers/" class="hover:text-[#0F5C4A]">LA Lakers</a></li>
+          <li><a href="/watch/nfl/" class="hover:text-[#0F5C4A]">All 32 NFL Teams</a></li>
+          <li><a href="/watch/nba/" class="hover:text-[#0F5C4A]">All 30 NBA Teams</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 6: About & Devices -->
+      <div>
+        <h2 class="font-semibold text-xs uppercase tracking-wider text-[#5C5C5C] mb-4">
+          About & Devices
+        </h2>
+        <ul class="space-y-2 text-[#5C5C5C]">
+          <li><a href="/devices/roku/" class="hover:text-[#0F5C4A]">Roku Devices</a></li>
+          <li><a href="/devices/apple-tv/" class="hover:text-[#0F5C4A]">Apple TV</a></li>
+          <li><a href="/devices/amazon-fire-tv/" class="hover:text-[#0F5C4A]">Fire TV</a></li>
+          <li><a href="/how-we-test/" class="hover:text-[#0F5C4A]">How We Test</a></li>
+          <li><a href="/editorial-policy/" class="hover:text-[#0F5C4A]">Editorial Policy</a></li>
+          <li><a href="/about/" class="hover:text-[#0F5C4A]">About Our Team</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Sub-Footer: Legal & Verification Footnotes -->
+  <div class="bg-[#FAF8F5] hairline-t py-8 px-4 sm:px-6 text-xs text-[#5C5C5C]">
+    <div class="max-w-7xl mx-auto space-y-4">
+      <p class="leading-relaxed">
+        <strong>Important Price Notice:</strong> Prices, package names, promo terms, and regional channel availability change frequently. We audit provider pricing monthly, but always confirm the latest rates on the provider's checkout page before subscribing. Last checked: {dataMeta.lastVerifiedLabel}.
+      </p>
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 hairline-t">
+        <div class="flex flex-wrap gap-4">
+          <span>&copy; {new Date().getFullYear()} LiveTVStreaming.services. All rights reserved.</span>
+          <a href="/affiliate-disclosure/" class="hover:underline">Affiliate Disclosure</a>
+          <a href="/privacy-policy/" class="hover:underline">Privacy Policy</a>
+          <a href="/terms/" class="hover:underline">Terms of Service</a>
+          <a href="/contact/" class="hover:underline">Contact</a>
+          <a href="/sitemap-index.xml" class="hover:underline font-mono text-[11px]">sitemap-index.xml</a>
+          <a href="/robots.txt" class="hover:underline font-mono text-[11px]">robots.txt</a>
+        </div>
+        <div class="text-[11px] text-[#5C5C5C]/80">
+          Targeting US Cord-Cutters · No Cable Contracts
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

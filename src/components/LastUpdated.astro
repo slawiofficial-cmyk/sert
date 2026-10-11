@@ -1,0 +1,41 @@
+---
+import servicesData from '../data/services.json';
+import { formatVerifiedDate } from '../lib/coverage';
+
+interface Props {
+  date?: string;
+  datetime?: string;
+  serviceId?: string;
+}
+
+const { date: explicitDate, datetime: explicitDatetime, serviceId } = Astro.props;
+
+// If a serviceId or service is provided, derive date from service's dateModified
+let displayDate = explicitDate;
+let datetimeAttr = explicitDatetime;
+
+if (!displayDate) {
+  if (serviceId) {
+    const svc = servicesData.services.find(s => s.id === serviceId);
+    if (svc?.dateModified) {
+      datetimeAttr = svc.dateModified;
+      displayDate = formatVerifiedDate(svc.dateModified);
+    }
+  }
+}
+
+// Default to the data's lastVerified date so pages never carry a hand-typed date.
+if (!datetimeAttr) {
+  datetimeAttr = servicesData.lastVerified;
+}
+if (!displayDate) {
+  displayDate = formatVerifiedDate(datetimeAttr);
+}
+---
+
+<div class="flex items-center gap-2 text-xs text-[#5C5C5C]">
+  <svg class="w-3.5 h-3.5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span>Last checked & updated: <time datetime={datetimeAttr} class="font-medium text-[#1A1A1A]">{displayDate}</time></span>
+</div>

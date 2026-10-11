@@ -1,0 +1,27 @@
+---
+interface Props {
+  slotId: string;
+  format?: 'leaderboard' | 'rectangle';
+  class?: string;
+}
+
+const {
+  slotId,
+  format = 'leaderboard',
+  class: className = ''
+} = Astro.props;
+
+const dimensions =
+  format === 'leaderboard'
+    ? 'min-h-[90px] max-w-[728px] my-6'
+    : 'min-h-[250px] w-full max-w-[300px] my-4';
+---
+
+<!-- Reserved fixed-size ad slot container to prevent cumulative layout shift (CLS) -->
+<div
+  id={`ad-slot-${slotId}`}
+  class={`mx-auto bg-stone-50 border border-dashed border-[#E7E2DA] rounded flex items-center justify-center text-[11px] text-stone-400 select-none ${dimensions} ${className}`}
+  aria-hidden="true"
+>
+  <span class="sr-only">Advertisement Placeholder</span>
+</div>

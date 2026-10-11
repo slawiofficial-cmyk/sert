@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+
+import devicesData from '../../data/devices.json';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../../lib/seo';
+import type { StreamingDevice } from '../../types';
+
+const devices = devicesData.devices as unknown as StreamingDevice[];
+const meta = generatePageMeta('hub-devices');
+const breadcrumbs = [{ name: 'Devices & Platforms Directory', url: '/devices/' }];
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="mb-8">
+      <LastUpdated />
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A] mt-2">
+        Live TV Streaming Apps by Device & Platform (2026)
+      </h1>
+      <p class="text-base text-[#5C5C5C] mt-2 max-w-2xl leading-relaxed">
+        Discover which live TV streaming services run best on Roku, Amazon Fire TV, Apple TV, Google TV, Smart TVs, and game consoles.
+      </p>
+    </div>
+
+    <AffiliateDisclosure />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
+      {devices.map((d) => (
+        <a
+          href={`/devices/${d.slug}/`}
+          class="group block p-5 bg-white border border-[#E7E2DA] hover:border-[#0F5C4A] rounded hover:shadow-2xs transition-all"
+        >
+          <span class="font-editorial text-lg font-bold text-[#1A1A1A] group-hover:text-[#0F5C4A] block">
+            {d.name}
+          </span>
+          <p class="text-xs text-[#5C5C5C] mt-2 leading-relaxed">
+            {d.setupTips}
+          </p>
+          <span class="text-xs font-semibold text-[#0F5C4A] mt-4 inline-block">
+            Best apps for {d.name.split(' ')[0]} &rarr;
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

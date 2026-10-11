@@ -1,0 +1,285 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ChannelFinder from '../../components/ChannelFinder.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import ServiceCompareCard from '../../components/ServiceCompareCard.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import Price from '../../components/Price.astro';
+import DataNotice from '../../components/DataNotice.astro';
+
+import channelsData from '../../data/channels.json';
+import servicesData from '../../data/services.json';
+import { getCheapestServiceForChannel, getCarriage, formatUsd, isCarriedBy, compareByMainPrice } from '../../lib/coverage';
+import { getRelatedChannels } from '../../lib/routes';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema, generateFAQSchema, hashString } from '../../lib/seo';
+import type { Channel, StreamingService, FAQItem } from '../../types';
+
+export function getStaticPaths() {
+  const channels = channelsData.channels as unknown as Channel[];
+  return channels.map((channel) => ({
+    params: { slug: channel.slug },
+    props: { channel }
+  }));
+}
+
+interface Props {
+  channel: Channel;
+}
+
+const { channel } = Astro.props;
+const allServices = servicesData.services as unknown as StreamingService[];
+
+const carryingServices = allServices.filter((s) => isCarriedBy(channel, s.id)).sort(compareByMainPrice);
+const requirementFor = (svc: StreamingService) => getCarriage(channel, svc)?.requirement ?? null;
+const cheapest = getCheapestServiceForChannel(channel.id);
+const related = getRelatedChannels(channel, 6);
+
+// Deterministic copy variation
+const hash = hashString(channel.slug);
+const introVariants = [
+  `Looking to watch ${channel.name} live without a restrictive two-year cable TV agreement? You have several high-quality streaming options. We verified every service carrying ${channel.name} and calculated the absolute lowest-cost package available today.`,
+  `Cut the cord without losing access to ${channel.name}. Below is our verified breakdown of which live TV streaming services include ${channel.name} in their baseline subscription tier, including free trials and simultaneous screen caps.`,
+  `Watching ${channel.name} online without traditional cable is straightforward in 2026. Review our carriage audit below to see which plans carry ${channel.name} and how to start streaming immediately on Roku, Fire TV, or Apple TV.`
+];
+const introText = introVariants[hash % introVariants.length];
+
+const channelFaqs: FAQItem[] = [
+  {
+    question: `What is the cheapest way to watch ${channel.name} live without cable?`,
+    answer: cheapest
+      ? `The lowest-cost way to stream ${channel.name} live is through ${cheapest.service.name}, at about ${formatUsd(cheapest.price)}/month (${cheapest.service.planName}${cheapest.requirement ? `; ${cheapest.requirement.toLowerCase()}` : ''}). ${
+          cheapest.service.freeTrialDays > 0
+            ? `You can test it out risk-free with their ${cheapest.service.freeTrialDays}-day free trial.`
+            : 'It operates on a month-to-month basis with zero contracts.'
+        }`
+      : `Currently, ${channel.name} is not available on standard linear live streaming bundles. Check standalone apps or over-the-air antennas.`
+  },
+  {
+    question: `Can I watch ${channel.name} on Roku, Fire TV, or Apple TV?`,
+    answer: `Yes. All major streaming providers that carry ${channel.name} maintain dedicated applications for Roku, Amazon Fire TV, Apple TV, Google TV, Samsung Smart TVs, iOS, and Android.`
+  },
+  {
+    question: `Can I record ${channel.name} using cloud DVR?`,
+    answer: `Yes. If you subscribe to a service carrying ${channel.name} such as YouTube TV or Hulu + Live TV, you receive unlimited cloud DVR storage to record programs, series, and live events to watch on your own schedule.`
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Channels', url: '/channels/' },
+  { name: channel.name, url: `/channels/${channel.slug}/` }
+];
+
+const meta = generatePageMeta('channel', {
+  channelName: channel.name,
+  slug: channel.slug,
+  cheapestService: cheapest?.service.name,
+  cheapestPrice: cheapest ? formatUsd(cheapest.price).slice(1) : undefined
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateFAQSchema(channelFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <LastUpdated />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs uppercase tracking-wider text-[#0F5C4A] font-semibold">
+          {channel.category} Network
+        </span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        How to Watch {channel.name} Live Without Cable (2026)
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        {introText}
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Cheapest Option Banner -->
+    {cheapest && (
+      <div class="my-8 bg-white border border-[#C2410C]/60 rounded p-6 shadow-2xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-[#C2410C] block mb-1">
+              Cheapest Way to Watch {channel.name}
+            </span>
+            <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+              {cheapest.service.name} (From {formatUsd(cheapest.price)}/mo)
+            </h2>
+            <p class="text-xs text-[#5C5C5C] mt-1 max-w-xl">
+              {cheapest.service.planName}.
+              {cheapest.requirement && <strong class="text-amber-700"> {cheapest.requirement}.</strong>}
+              {cheapest.promoLine && <span class="text-[#C2410C]"> Promo: {cheapest.promoLine}.</span>}
+            </p>
+            <p class="text-xs text-[#5C5C5C] mt-1 max-w-xl">
+              {cheapest.service.summary} Includes {cheapest.service.dvrStorage}.
+            </p>
+            <DataNotice kind="prices" class="mt-1" />
+          </div>
+          <CTAButton
+            href={cheapest.service.priceSourceUrl}
+            serviceName={cheapest.service.name}
+            shortName={cheapest.service.shortName}
+            variant="warm"
+            class="sm:w-auto shrink-0"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Carrying Services Table -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        Streaming Services That Carry {channel.name} ({carryingServices.length} Providers)
+      </h2>
+
+      {carryingServices.length > 0 ? (
+        <div>
+          <!-- Mobile Card List (< 768px): block md:hidden -->
+          <div class="block md:hidden space-y-3">
+            {carryingServices.map((svc, idx) => (
+              <div>
+                {requirementFor(svc) && (
+                  <p class="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-1">
+                    {channel.name}: {requirementFor(svc)}
+                  </p>
+                )}
+                <ServiceCompareCard service={svc} isRankOne={idx === 0} />
+              </div>
+            ))}
+          </div>
+
+          <!-- Desktop Table (>= 768px): hidden md:block -->
+          <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+            <table class="w-full text-left text-xs border-collapse table-fixed">
+              <colgroup>
+                <col class="w-[32%]" />
+                <col class="w-[18%]" />
+                <col class="w-[14%]" />
+                <col class="w-[14%]" />
+                <col class="w-[10%]" />
+                <col class="w-[12%]" />
+              </colgroup>
+              <thead>
+                <tr class="bg-[#FAF8F5] border-b border-[#E7E2DA] text-[#1A1A1A]">
+                  <th class="py-3 px-4 font-semibold">Service</th>
+                  <th class="py-3 px-4 font-semibold">Monthly Price</th>
+                  <th class="py-3 px-4 font-semibold">Free Trial</th>
+                  <th class="py-3 px-4 font-semibold">Cloud DVR</th>
+                  <th class="py-3 px-4 font-semibold">Screens</th>
+                  <th class="py-3 px-4 text-right pr-4 font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#E7E2DA]">
+                {carryingServices.map((svc) => {
+                  const requirement = requirementFor(svc);
+                  return (
+                    <tr class="hover:bg-stone-50/75 transition-colors">
+                      <td class="py-3.5 px-4 align-top">
+                        <a
+                          href={`/services/${svc.slug}/`}
+                          class="font-bold text-sm text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline"
+                        >
+                          {svc.name}
+                        </a>
+                        <span class="text-[11px] text-[#5C5C5C] block break-words mt-0.5">
+                          {svc.bestFor}
+                        </span>
+                        {requirement && (
+                          <span class="inline-block mt-1 text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5">
+                            {requirement}
+                          </span>
+                        )}
+                      </td>
+                      <td class="py-3.5 px-4 tabular-nums align-top">
+                        <Price service={svc} size="sm" showPlan={true} />
+                      </td>
+                      <td class="py-3.5 px-4 align-top whitespace-nowrap">
+                        {svc.freeTrialDays > 0 ? `${svc.freeTrialDays} Days Free` : '–'}
+                      </td>
+                      <td class="py-3.5 px-4 text-[#5C5C5C] align-top break-words">
+                        {svc.dvrStorage}
+                      </td>
+                      <td class="py-3.5 px-4 tabular-nums text-[#5C5C5C] align-top whitespace-nowrap">
+                        {svc.simultaneousStreams} streams
+                      </td>
+                      <td class="py-3.5 px-4 text-right pr-4 align-top">
+                        <CTAButton
+                          href={svc.priceSourceUrl}
+                          serviceName={svc.name}
+                          shortName={svc.shortName}
+                          size="sm"
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <DataNotice kind="both" variant="footnote" class="mt-3" />
+        </div>
+      ) : (
+        <div class="bg-white border border-[#E7E2DA] rounded p-6 text-sm text-[#5C5C5C]">
+          <p class="font-semibold text-[#1A1A1A] mb-1">
+            Currently not carried by tracked standalone streaming services.
+          </p>
+          <p>
+            {channel.name} may require a direct direct-to-consumer digital subscription or an over-the-air HD antenna for your regional market.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- Ad slot -->
+    <AdSlot slotId="channel-mid" format="leaderboard" />
+
+    <!-- Channel Finder Pre-Selected with this channel -->
+    <section class="my-12">
+      <ChannelFinder
+        initialSelectedChannels={[channel.id]}
+        title={`Find Plans with ${channel.name} & Your Other Favorites`}
+        subtitle={`We've pre-selected ${channel.name} below. Add other channels you watch to calculate the best bundle and coverage.`}
+      />
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={channelFaqs} title={`Frequently Asked Questions About Watching ${channel.name}`} />
+
+    <!-- Related Channels -->
+    <RelatedLinks
+      title={`Related ${channel.category.toUpperCase()} Channels`}
+      links={related.map((rel) => ({
+        title: `How to Watch ${rel.name} Live`,
+        url: `/channels/${rel.slug}/`,
+        description: rel.description,
+        badge: `${rel.category}`
+      }))}
+      hubUrl="/channels/"
+      hubLabel="Browse All Channels &rarr;"
+    />
+  </div>
+</BaseLayout>

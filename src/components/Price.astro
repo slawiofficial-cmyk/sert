@@ -1,0 +1,73 @@
+---
+import type { StreamingService } from '../types';
+import { getPriceView } from '../lib/coverage';
+
+interface Props {
+  service: StreamingService;
+  /** Text size of the main price. */
+  size?: 'sm' | 'md' | 'lg';
+  align?: 'left' | 'right' | 'sm-right';
+  /** Show the plan the price refers to (e.g. "Base plan"). */
+  showPlan?: boolean;
+  /** 'required' = fees everyone pays, 'all' = also optional add-ons, 'none' = hide. */
+  fees?: 'required' | 'all' | 'none';
+  /** Print each fee's note under it instead of only as a tooltip. */
+  showFeeNotes?: boolean;
+  /** Show the promo as a secondary line. */
+  showPromo?: boolean;
+  /** Show the provider-source link under the price. */
+  showSource?: boolean;
+  class?: string;
+}
+
+const {
+  service,
+  size = 'md',
+  align = 'left',
+  showPlan = false,
+  fees = 'required',
+  showFeeNotes = false,
+  showPromo = true,
+  showSource = true,
+  class: className = ''
+} = Astro.props;
+
+const view = getPriceView(service);
+const visibleFees = fees === 'none' ? [] : view.fees.filter((fee) => fees === 'all' || !fee.optional);
+
+const sizeClass = {
+  sm: 'text-base',
+  md: 'text-2xl',
+  lg: 'text-3xl'
+}[size];
+const justify = { left: '', right: 'justify-end', 'sm-right': 'sm:justify-end' }[align];
+const textAlign = { left: 'text-left', right: 'text-right', 'sm-right': 'text-left sm:text-right' }[align];
+---
+
+<div class={`min-w-0 ${textAlign} ${className}`}>
+  <div class={`flex items-baseline gap-1 ${justify}`}>
+    <span class={`font-editorial ${sizeClass} font-bold text-[#1A1A1A] tabular-nums whitespace-nowrap`}>
+      {view.mainText}
+    </span>
+    <span class="text-xs text-[#5C5C5C]">/mo</span>
+  </div>
+  {showPlan && (
+    <span class="block text-[11px] text-[#5C5C5C] leading-tight mt-0.5 [overflow-wrap:anywhere]">
+      {view.planName}
+    </span>
+  )}
+  {visibleFees.map((fee) => (
+    <span class="block text-[11px] text-[#5C5C5C] leading-tight mt-0.5 [overflow-wrap:anywhere]" title={fee.note}>
+      {fee.text}
+      {showFeeNotes && <span class="block text-[10px] text-stone-400">{fee.note}</span>}
+    </span>
+  ))}
+  {showPromo && view.promoLine && (
+    <span class="block text-[11px] text-[#C2410C] leading-tight mt-0.5 [overflow-wrap:anywhere]">
+      Promo: {view.promoLine}
+    </span>
+  )}
+  {showSource && <a href={view.sourceUrl} target="_blank" rel="nofollow noopener" class="block text-[10px] text-stone-400 hover:text-[#0F5C4A] underline mt-0.5">
+    Source: provider site
+  </a>}
+</div>

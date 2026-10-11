@@ -1,0 +1,67 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'highlight' | 'secondary' | 'link';
+  size?: 'md' | 'sm';
+  class?: string;
+  fullWidth?: boolean;
+  target?: string;
+  rel?: string;
+  showArrow?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className = '',
+  fullWidth = false,
+  target,
+  rel,
+  showArrow = true,
+  ariaLabel
+} = Astro.props;
+
+// Is this an external link? If target/rel aren't specified but it's an affiliate/external link, apply defaults
+const isExternal = target === '_blank' || (rel && rel.includes('sponsored')) || href.startsWith('http') || href.startsWith('#AFFILIATE');
+const resolvedTarget = target ?? (isExternal ? '_blank' : undefined);
+// Only real affiliate placeholders are sponsored; plain provider links are not.
+const resolvedRel = rel ?? (href.startsWith('#AFFILIATE') ? 'sponsored nofollow noopener' : isExternal ? 'nofollow noopener' : undefined);
+
+const variantClass =
+  variant === 'highlight'
+    ? 'btn-highlight'
+    : variant === 'secondary'
+      ? 'btn-secondary'
+      : variant === 'link'
+        ? 'btn-link'
+        : 'btn-primary';
+
+const sizeClass = variant === 'link' ? '' : size === 'sm' ? 'btn-sm' : 'btn-md';
+const widthClass = fullWidth ? 'w-full' : '';
+---
+
+<a
+  href={href}
+  target={resolvedTarget}
+  rel={resolvedRel}
+  class={`btn-base ${variantClass} ${sizeClass} ${widthClass} ${className}`.trim()}
+  aria-label={ariaLabel}
+>
+  <slot />
+  {showArrow && (
+    <svg
+      class="btn-arrow-icon"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 8h10M9 4l4 4-4 4" />
+    </svg>
+  )}
+</a>

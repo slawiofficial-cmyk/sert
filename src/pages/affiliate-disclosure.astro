@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import LastUpdated from '../components/LastUpdated.astro';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../lib/seo';
+
+const meta = generatePageMeta('trust', { title: 'Affiliate Disclosure', slug: 'affiliate-disclosure' });
+const breadcrumbs = [
+  { name: 'Editorial', url: '/about/' },
+  { name: 'Affiliate Disclosure', url: '/affiliate-disclosure/' }
+];
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+    <LastUpdated date="October 1, 2026" />
+
+    <div class="space-y-6 text-[#1A1A1A] leading-relaxed mt-6">
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight">
+        Affiliate Disclosure
+      </h1>
+      <p class="text-lg text-[#5C5C5C]">
+        Full transparency on how LiveTVStreaming.services is funded and maintained.
+      </p>
+
+      <div class="bg-white border border-[#E7E2DA] rounded p-6 my-6">
+        <h2 class="font-editorial text-xl font-bold mb-2">FTC Disclosure Compliance</h2>
+        <p class="text-sm text-[#5C5C5C] leading-relaxed">
+          In compliance with Federal Trade Commission (FTC) guidelines, please assume that any link pointing to an external live TV streaming service provider (such as YouTube TV, Sling TV, Fubo, Hulu, Philo, or DirecTV Stream) may be an affiliate link.
+        </p>
+      </div>
+
+      <h2 class="font-editorial text-2xl font-bold mt-8">How Affiliate Links Work</h2>
+      <p>
+        When you click on a referral link on our website and subscribe to a streaming package or trial, the service provider may pay us a referral commission. This occurs at <strong>no extra cost to you</strong>. In fact, we frequently negotiate promotional discounts or free trial extensions for our readers.
+      </p>
+      <p>
+        Our editorial team operates with strict autonomy from commercial monetization. Service providers cannot purchase higher ratings, edit review content, or influence our algorithmically calculated &ldquo;Best Match&rdquo; recommendations.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

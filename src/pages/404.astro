@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { generateSiteSchema } from '../lib/seo';
+
+const popularLinks = [
+  { label: 'YouTube TV Review', path: '/services/youtube-tv/' },
+  { label: 'Hulu vs. YouTube TV', path: '/compare/youtube-tv-vs-hulu-live/' },
+  { label: 'Sling TV vs. YouTube TV', path: '/compare/youtube-tv-vs-sling-tv/' },
+  { label: 'Watch ESPN Without Cable', path: '/channels/espn/' },
+  { label: 'New York, NY Local Channels', path: '/local/new-york-ny/' },
+  { label: 'NFL Stream Guide', path: '/watch/nfl/' },
+  { label: 'Roku Streaming Apps', path: '/devices/roku/' },
+  { label: 'Interactive Channel Finder', path: '/#finder' }
+];
+
+const schemas = generateSiteSchema();
+---
+
+<BaseLayout
+  title="Page Not Found (404) | LiveTVStreaming.services"
+  description="The page you requested could not be found. Explore our cord-cutting comparison directory."
+  canonical="https://livetvstreaming.services/404"
+  jsonLd={schemas}
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 text-center">
+    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-stone-100 border border-[#E7E2DA] mb-4 text-stone-600 font-bold font-editorial text-2xl">
+      404
+    </div>
+    <h1 class="font-editorial text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
+      Page Not Found
+    </h1>
+    <p class="text-sm text-[#5C5C5C] mt-2 max-w-md mx-auto leading-relaxed">
+      We couldn't locate the requested page. Use our quick directory links below or return to the channel finder.
+    </p>
+
+    <!-- Popular Directory Links -->
+    <div class="mt-12 text-left bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-3">
+        Popular Live TV Streaming Guides
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        {popularLinks.map((link) => (
+          <a
+            href={link.path}
+            class="p-2 rounded hover:bg-[#FAF8F5] text-[#0F5C4A] font-medium border border-transparent hover:border-[#E7E2DA] transition-colors"
+          >
+            &rarr; {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <a
+        href="/"
+        class="inline-flex items-center justify-center px-4 py-2 bg-[#0F5C4A] text-white text-xs font-semibold rounded hover:bg-[#0c4739] transition-colors"
+      >
+        Return to Homepage &rarr;
+      </a>
+    </div>
+  </div>
+</BaseLayout>

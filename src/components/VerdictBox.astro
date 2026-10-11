@@ -1,0 +1,88 @@
+---
+import type { StreamingService } from '../types';
+import CTAButton from './CTAButton.astro';
+import Price from './Price.astro';
+import DataNotice from './DataNotice.astro';
+import { getTrackedShort } from '../lib/coverage';
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+---
+
+<div class="bg-white border border-[#E7E2DA] rounded p-6 my-6">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#E7E2DA]">
+    <div class="space-y-2">
+      <div class="flex items-center gap-3">
+        <span class="text-xs uppercase tracking-wider font-semibold text-[#0F5C4A]">
+          Editor's Verdict
+        </span>
+        <span class="text-stone-300">·</span>
+        <span class="text-xs text-[#5C5C5C]">{service.bestFor}</span>
+      </div>
+      <h2 class="font-editorial text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+        {service.name}
+      </h2>
+      <p class="text-sm text-[#5C5C5C] max-w-2xl leading-relaxed">
+        {service.summary}
+      </p>
+    </div>
+
+    <!-- Rating and price block -->
+    <div class="flex items-center gap-6 lg:border-l lg:border-[#E7E2DA] lg:pl-6 shrink-0">
+      <div>
+        <span class="text-xs text-[#5C5C5C] block">Editorial Score</span>
+        <div class="flex items-baseline gap-1">
+          <span class="font-editorial text-3xl font-bold text-[#1A1A1A] tabular-nums">
+            {service.editorialRating.toFixed(1)}
+          </span>
+          <span class="text-xs text-[#5C5C5C]">/ 5.0</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="text-xs text-[#5C5C5C] block">Monthly Rate</span>
+        <Price service={service} size="lg" showPlan={true} />
+        <DataNotice kind="prices" class="mt-1 max-w-[14rem]" />
+      </div>
+
+      <CTAButton
+        href={service.priceSourceUrl}
+        serviceName={service.name}
+        shortName={service.shortName}
+        promoText={service.promoDescription}
+        class="w-full sm:w-auto"
+      />
+    </div>
+  </div>
+
+  <!-- Key specifications grid -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-xs text-[#5C5C5C]">
+    <div>
+      <span class="text-stone-400 block mb-0.5">Free Trial</span>
+      <span class="text-sm font-semibold text-[#1A1A1A]">
+        {service.freeTrialDays > 0 ? `${service.freeTrialDays} Days Free` : 'No Free Trial'}
+      </span>
+    </div>
+    <div>
+      <span class="text-stone-400 block mb-0.5">Cloud DVR</span>
+      <span class="text-sm font-semibold text-[#1A1A1A]">
+        {service.dvrStorage}
+      </span>
+    </div>
+    <div>
+      <span class="text-stone-400 block mb-0.5">Simultaneous Screens</span>
+      <span class="text-sm font-semibold text-[#1A1A1A] tabular-nums">
+        {service.simultaneousStreams} streams
+      </span>
+    </div>
+    <div>
+      <span class="text-stone-400 block mb-0.5">Key channels tracked</span>
+      <span class="text-sm font-semibold text-[#1A1A1A] tabular-nums">
+        {getTrackedShort(service)}
+      </span>
+    </div>
+  </div>
+</div>

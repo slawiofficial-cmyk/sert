@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import CTAButton from '../../../components/CTAButton.astro';
+import ServiceCompareCard from '../../../components/ServiceCompareCard.astro';
+import FAQ from '../../../components/FAQ.astro';
+import RelatedLinks from '../../../components/RelatedLinks.astro';
+import AuthorByline from '../../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../../components/LastUpdated.astro';
+import AdSlot from '../../../components/AdSlot.astro';
+import Price from '../../../components/Price.astro';
+import DataNotice from '../../../components/DataNotice.astro';
+
+import teamsData from '../../../data/teams.json';
+import servicesData from '../../../data/services.json';
+import { getRelatedTeams } from '../../../lib/routes';
+import { formatUsd, getCheapestByMainPrice, getPromoLine } from '../../../lib/coverage';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema, generateFAQSchema, hashString } from '../../../lib/seo';
+import type { SportsTeam, StreamingService, FAQItem } from '../../../types';
+
+export function getStaticPaths() {
+  const teams = teamsData.teams as unknown as SportsTeam[];
+  return teams.map((team) => ({
+    params: {
+      league: team.league.toLowerCase(),
+      team: team.slug
+    },
+    props: { team }
+  }));
+}
+
+interface Props {
+  team: SportsTeam;
+}
+
+const { team } = Astro.props;
+const allServices = servicesData.services as unknown as StreamingService[];
+
+const carryingServices = allServices.filter((s) =>
+  team.servicesThatCarryGames.includes(s.id)
+);
+
+// Cheapest by main (monthly) price; promos are shown only as a secondary line.
+const cheapestService = getCheapestByMainPrice(carryingServices);
+const cheapestPromo = cheapestService ? getPromoLine(cheapestService) : null;
+
+const related = getRelatedTeams(team, 6);
+
+const hash = hashString(team.slug);
+const teamIntroVariants = [
+  `Want to stream every ${team.name} game this season without an expensive cable package? You don't have to miss a single play. Below is our complete broadcast breakdown for ${team.name} fans.`,
+  `Following the ${team.name} has never been easier for cord-cutters. We've mapped out their regional broadcast networks, national telecast channels, and the cheapest legal streaming services to watch live.`,
+  `Never miss a ${team.name} kickoff or tip-off. Check our verified carriage guide to find out which live TV streaming services carry your team's local broadcasts without long-term contracts.`
+];
+const introText = teamIntroVariants[hash % teamIntroVariants.length];
+
+const teamFaqs: FAQItem[] = [
+  {
+    question: `What channel broadcasts ${team.name} games?`,
+    answer: `${team.broadcastingSummary} National telecasts appear on ${team.nationalNetworks.join(', ')}.`
+  },
+  {
+    question: `What is the cheapest way to watch the ${team.name} live?`,
+    answer: cheapestService
+      ? `The lowest-cost streaming option for ${team.name} games is ${cheapestService.name}, at about ${formatUsd(cheapestService.monthlyPrice)}/month (${cheapestService.planName}). ${
+          cheapestService.freeTrialDays > 0 ? `It includes a ${cheapestService.freeTrialDays}-day free trial.` : ''
+        }`
+      : 'Compare live streaming providers or consider an over-the-air HD antenna for broadcast games.'
+  },
+  {
+    question: `Can I watch out-of-market ${team.name} games?`,
+    answer: team.league === 'NFL'
+      ? 'For out-of-market NFL games, YouTube TV exclusively carries the NFL Sunday Ticket add-on, allowing you to watch every out-of-market Sunday afternoon game.'
+      : 'For out-of-market NBA games, NBA League Pass streams all non-national games with local broadcast feeds on major streaming devices.'
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Sports', url: '/watch/' },
+  { name: team.league, url: `/watch/${team.league.toLowerCase()}/` },
+  { name: team.name, url: `/watch/${team.league.toLowerCase()}/${team.slug}/` }
+];
+
+const meta = generatePageMeta('team', {
+  teamName: team.name,
+  league: team.league,
+  slug: team.slug
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateFAQSchema(teamFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center gap-2 mb-2">
+        <LastUpdated />
+        <span class="text-stone-300">·</span>
+        <span class="text-xs uppercase tracking-wider text-[#0F5C4A] font-semibold">
+          {team.league} · {team.conferenceOrDivision}
+        </span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        How to Watch {team.name} Games Without Cable (2026)
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        {introText}
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Broadcast Summary Card -->
+    <section class="my-8 bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mb-3">
+        {team.name} Broadcast Details & Networks
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">Regional Home Network</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">
+            {team.regionalNetwork || 'Local Network Broadcasts (FOX / CBS / NBC)'}
+          </span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">National Broadcast Networks</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">
+            {team.nationalNetworks.join(', ')}
+          </span>
+        </div>
+        <div class="p-3 bg-[#FAF8F5] border border-[#E7E2DA] rounded">
+          <span class="text-stone-400 uppercase text-[10px] block font-semibold">Home Market / City</span>
+          <span class="font-bold text-sm text-[#1A1A1A]">
+            {team.city}
+          </span>
+        </div>
+      </div>
+      <p class="text-xs text-[#5C5C5C] mt-4 leading-relaxed">
+        <strong>Carriage Overview:</strong> {team.broadcastingSummary}
+      </p>
+    </section>
+
+    <!-- Cheapest Option Banner -->
+    {cheapestService && (
+      <div class="my-8 bg-white border border-[#C2410C]/60 rounded p-6 shadow-2xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs uppercase tracking-wider font-bold text-[#C2410C] block mb-1">
+              Cheapest Streaming Option for {team.name}
+            </span>
+            <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+              {cheapestService.name} (From {formatUsd(cheapestService.monthlyPrice)}/mo)
+            </h2>
+            <p class="text-xs text-[#5C5C5C] mt-1 max-w-xl">
+              {cheapestService.planName}. Carries live game broadcasts with {cheapestService.dvrStorage} and month-to-month billing.
+              {cheapestPromo && <span class="text-[#C2410C]"> Promo: {cheapestPromo}.</span>}
+            </p>
+            <DataNotice kind="prices" class="mt-1" />
+          </div>
+          <CTAButton
+            href={cheapestService.priceSourceUrl}
+            serviceName={cheapestService.name}
+            shortName={cheapestService.shortName}
+            variant="warm"
+            class="sm:w-auto shrink-0"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Ad slot -->
+    <AdSlot slotId="team-mid" format="leaderboard" />
+
+    <!-- Carrying Services Table -->
+    <section class="my-10">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        Services Carrying {team.name} Broadcasts
+      </h2>
+
+      <!-- Mobile Card List (< 768px): block md:hidden -->
+      <div class="block md:hidden space-y-3">
+        {carryingServices.map((svc, idx) => (
+          <ServiceCompareCard service={svc} isRankOne={idx === 0} />
+        ))}
+      </div>
+
+      <!-- Desktop Table (>= 768px): hidden md:block -->
+      <div class="hidden md:block border border-[#E7E2DA] rounded bg-white shadow-2xs">
+        <table class="w-full text-left text-xs border-collapse table-fixed">
+          <colgroup>
+            <col class="w-[32%]" />
+            <col class="w-[18%]" />
+            <col class="w-[14%]" />
+            <col class="w-[14%]" />
+            <col class="w-[10%]" />
+            <col class="w-[12%]" />
+          </colgroup>
+          <thead>
+            <tr class="bg-[#FAF8F5] border-b border-[#E7E2DA] text-[#1A1A1A]">
+              <th class="py-3 px-4 font-semibold">Service</th>
+              <th class="py-3 px-4 font-semibold">Monthly Price</th>
+              <th class="py-3 px-4 font-semibold">Free Trial</th>
+              <th class="py-3 px-4 font-semibold">Cloud DVR</th>
+              <th class="py-3 px-4 font-semibold">Simultaneous Streams</th>
+              <th class="py-3 px-4 text-right pr-4 font-semibold">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E7E2DA]">
+            {carryingServices.map((svc) => {
+              return (
+                <tr class="hover:bg-stone-50/75 transition-colors">
+                  <td class="py-3.5 px-4 align-top">
+                    <a
+                      href={`/services/${svc.slug}/`}
+                      class="font-bold text-sm text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline"
+                    >
+                      {svc.name}
+                    </a>
+                    <span class="text-[11px] text-[#5C5C5C] block break-words mt-0.5">{svc.bestFor}</span>
+                  </td>
+                  <td class="py-3.5 px-4 tabular-nums align-top">
+                    <Price service={svc} size="sm" showPlan={true} />
+                  </td>
+                  <td class="py-3.5 px-4 align-top whitespace-nowrap">
+                    {svc.freeTrialDays > 0 ? `${svc.freeTrialDays} Days Free` : '–'}
+                  </td>
+                  <td class="py-3.5 px-4 text-[#5C5C5C] align-top break-words">{svc.dvrStorage}</td>
+                  <td class="py-3.5 px-4 tabular-nums text-[#5C5C5C] align-top whitespace-nowrap">{svc.simultaneousStreams} screens</td>
+                  <td class="py-3.5 px-4 text-right pr-4 align-top">
+                    <CTAButton
+                      href={svc.priceSourceUrl}
+                      serviceName={svc.name}
+                      shortName={svc.shortName}
+                      size="sm"
+                    />
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <DataNotice kind="prices" variant="footnote" class="mt-3" />
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={teamFaqs} title={`Frequently Asked Questions for ${team.name} Fans`} />
+
+    <!-- Same League Teams -->
+    <RelatedLinks
+      title={`Other ${team.league} Team Broadcast Guides`}
+      links={related.map((rel) => ({
+        title: `How to Watch ${rel.name} Games`,
+        url: `/watch/${rel.league.toLowerCase()}/${rel.slug}/`,
+        description: rel.broadcastingSummary,
+        badge: `${rel.conferenceOrDivision}`
+      }))}
+      hubUrl={`/watch/${team.league.toLowerCase()}/`}
+      hubLabel={`All ${team.league} Teams &rarr;`}
+    />
+  </div>
+</BaseLayout>

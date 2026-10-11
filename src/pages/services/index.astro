@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import DataNotice from '../../components/DataNotice.astro';
+
+import servicesData from '../../data/services.json';
+import { generatePageMeta, generateSiteSchema, generateBreadcrumbSchema } from '../../lib/seo';
+import type { StreamingService } from '../../types';
+
+const services = servicesData.services as unknown as StreamingService[];
+const meta = generatePageMeta('hub-services');
+
+const breadcrumbs = [{ name: 'Services Directory', url: '/services/' }];
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs)
+];
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="mb-8">
+      <LastUpdated />
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A] mt-2">
+        All Live TV Streaming Services (2026 Directory)
+      </h1>
+      <p class="text-base text-[#5C5C5C] mt-2 max-w-2xl leading-relaxed">
+        Complete independent ranking and directory of all {services.length} tracked legal US live TV streaming providers. Compare pricing, channel lineups, and cloud DVR features.
+      </p>
+    </div>
+
+    <AffiliateDisclosure />
+
+    <div class="space-y-4 my-8">
+      {services.map((svc, idx) => (
+        <ServiceCard service={svc} rank={idx + 1} />
+      ))}
+      <DataNotice kind="both" variant="footnote" />
+    </div>
+  </div>
+</BaseLayout>

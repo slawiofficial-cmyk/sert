@@ -1,0 +1,103 @@
+---
+import type { StreamingService } from '../types';
+import Button from './Button.astro';
+import Price from './Price.astro';
+import { getTrackedShort } from '../lib/coverage';
+
+interface Props {
+  service: StreamingService;
+  rank?: number;
+}
+
+const { service, rank } = Astro.props;
+const isTopPick = rank === 1;
+const buttonLabelName = service.shortName || service.name;
+---
+
+<div
+  class={`bg-white border rounded p-4 sm:p-5 transition-colors ${
+    isTopPick ? 'border-[#C2410C]/60 shadow-xs' : 'border-[#E7E2DA] hover:border-stone-400'
+  }`}
+>
+  <!-- Mobile-first stacked layout below 640px (sm:), responsive row from 640px up -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- Section 1: Rank + Name + Best-For Tagline -->
+    <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+      {rank && (
+        <div
+          class={`w-7 h-7 rounded flex items-center justify-center font-bold text-xs shrink-0 ${
+            isTopPick
+              ? 'bg-[#C2410C] text-white'
+              : 'bg-stone-100 text-stone-700 border border-[#E7E2DA]'
+          }`}
+        >
+          #{rank}
+        </div>
+      )}
+
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-baseline gap-2">
+          <a
+            href={`/services/${service.slug}/`}
+            class="font-editorial text-xl font-bold text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline"
+          >
+            {service.name}
+          </a>
+          {isTopPick && (
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-[#C2410C] shrink-0">
+              Top Pick
+            </span>
+          )}
+        </div>
+        <p class="text-xs text-[#5C5C5C] mt-0.5 [overflow-wrap:anywhere] min-w-0">
+          {service.bestFor}
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 2: Specs overview (Lineup / DVR / Trial) -->
+    <div class="flex items-center gap-4 text-xs text-[#5C5C5C] sm:border-x sm:border-[#E7E2DA] sm:px-4 py-1 sm:py-0 border-y sm:border-y-0 border-stone-100">
+      <div class="min-w-0">
+        <span class="block text-stone-400 text-[10px] uppercase">Key channels tracked</span>
+        <span class="font-semibold text-[#1A1A1A] tabular-nums whitespace-nowrap">
+          {getTrackedShort(service)}
+        </span>
+      </div>
+      <div class="min-w-0">
+        <span class="block text-stone-400 text-[10px] uppercase">DVR</span>
+        <span class="font-semibold text-[#1A1A1A] whitespace-nowrap">
+          {service.dvrStorage.split(' ')[0]}
+        </span>
+      </div>
+      <div class="min-w-0">
+        <span class="block text-stone-400 text-[10px] uppercase">Trial</span>
+        <span class="font-semibold text-[#1A1A1A] whitespace-nowrap">
+          {service.freeTrialDays > 0 ? `${service.freeTrialDays}d` : 'None'}
+        </span>
+      </div>
+    </div>
+
+    <!-- Section 3 & 4: Price & Actions -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 shrink-0 min-w-0">
+      <!-- Price: main monthly rate first, fees and promo as secondary lines -->
+      <Price service={service} size="md" align="sm-right" showPlan={true} showSource={false} />
+
+      <!-- Actions: button on top, secondary links underneath so the row never overflows -->
+      <div class="flex flex-col items-stretch gap-1 w-full sm:w-44 shrink-0">
+        <Button
+          href={service.priceSourceUrl}
+          variant={isTopPick ? 'highlight' : 'primary'}
+          fullWidth={true}
+          showArrow={false}
+          class="justify-center text-center whitespace-nowrap"
+          ariaLabel={`Get ${buttonLabelName} official subscription`}
+        >
+          <span>Get {buttonLabelName}</span>
+        </Button>
+        <div class="flex items-center justify-center gap-2 text-[11px]">
+          <a href={`/services/${service.slug}/`} class="btn-link text-xs py-0.5">Read review</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

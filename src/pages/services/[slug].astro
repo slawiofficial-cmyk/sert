@@ -1,0 +1,344 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import VerdictBox from '../../components/VerdictBox.astro';
+import ProsCons from '../../components/ProsCons.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import AuthorByline from '../../components/AuthorByline.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import LastUpdated from '../../components/LastUpdated.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import MobileStickyCTA from '../../components/MobileStickyCTA.astro';
+import DataNotice from '../../components/DataNotice.astro';
+
+import servicesData from '../../data/services.json';
+import channelsData from '../../data/channels.json';
+import {
+  generatePageMeta,
+  generateSiteSchema,
+  generateBreadcrumbSchema,
+  generateProductReviewSchema,
+  generateFAQSchema
+} from '../../lib/seo';
+import { dataMeta, formatVerifiedDate, formatUsd, fourKLabel, formatFee, getCarriage, getPromoLine, getTrackedShort, isCarriedBy } from '../../lib/coverage';
+import type { StreamingService, Channel, FAQItem } from '../../types';
+
+export function getStaticPaths() {
+  const services = servicesData.services as unknown as StreamingService[];
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service }
+  }));
+}
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+const allServices = servicesData.services as unknown as StreamingService[];
+const channels = channelsData.channels as unknown as Channel[];
+
+const carriedChannels = channels.filter((ch) => isCarriedBy(ch, service.id));
+const promoLine = getPromoLine(service);
+const requiredFees = (service.extraFees ?? []).filter((fee) => !fee.optional);
+const optionalFees = (service.extraFees ?? []).filter((fee) => fee.optional);
+
+const categories = [
+  { key: 'sports', label: 'Sports Networks' },
+  { key: 'news', label: 'News & Financial' },
+  { key: 'entertainment', label: 'Entertainment & Drama' },
+  { key: 'lifestyle', label: 'Lifestyle & Reality' },
+  { key: 'kids', label: 'Kids & Family' },
+  { key: 'local', label: 'Local Broadcast Affiliates' }
+];
+
+const alternatives = allServices
+  .filter((s) => s.id !== service.id)
+  .sort((a, b) => Math.abs(a.monthlyPrice - service.monthlyPrice) - Math.abs(b.monthlyPrice - service.monthlyPrice))
+  .slice(0, 4);
+
+const serviceFaqs: FAQItem[] = [
+  {
+    question: `How much does ${service.name} cost per month?`,
+    answer: `${service.name} costs ${formatUsd(service.monthlyPrice)} per month for the ${service.planName} (approximate, as checked on our last review date). ${
+      requiredFees.length > 0
+        ? `Expect extra charges: ${requiredFees.map((fee) => formatFee(fee).text.replace(/^\+ /, '')).join('; ')}. `
+        : ''
+    }${
+      promoLine
+        ? `New subscribers may also see an introductory offer of ${promoLine}, which is temporary and not the regular price.`
+        : 'There are no annual contracts or hidden cancellation fees.'
+    }`
+  },
+  {
+    question: `Does ${service.name} offer a free trial?`,
+    answer: service.freeTrialDays > 0
+      ? `Yes, ${service.name} currently offers a ${service.freeTrialDays}-day free trial for eligible new subscribers. You can cancel online before the trial ends without being charged.`
+      : `No, ${service.name} does not routinely offer a standard free trial, but frequently runs introductory promotional rates.`
+  },
+  {
+    question: `How many devices can stream ${service.name} simultaneously?`,
+    answer: `${service.name} permits up to ${service.simultaneousStreams} simultaneous streams on separate screens under its base plan.`
+  },
+  {
+    question: `What are the cloud DVR limits on ${service.name}?`,
+    answer: `${service.name} includes ${service.dvrStorage}. Recordings can be scheduled and watched from any supported mobile device or connected smart TV.`
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Services', url: '/services/' },
+  { name: service.name, url: `/services/${service.slug}/` }
+];
+
+const meta = generatePageMeta('service', {
+  name: service.name,
+  slug: service.slug,
+  price: service.monthlyPrice
+});
+
+const schemas = [
+  ...generateSiteSchema(),
+  generateBreadcrumbSchema(breadcrumbs),
+  generateProductReviewSchema(service),
+  generateFAQSchema(serviceFaqs)
+].filter(Boolean);
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonical={meta.canonical}
+  jsonLd={schemas}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-28 md:pb-12">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <!-- Page Header -->
+    <div class="mb-6">
+      <div class="flex flex-wrap items-center gap-3 mb-2 text-xs text-[#5C5C5C]">
+        <LastUpdated serviceId={service.id} />
+        <span>·</span>
+        <span>Tested by LiveTVStreaming Lab</span>
+      </div>
+      <h1 class="font-editorial text-3xl sm:text-5xl font-bold tracking-tight text-[#1A1A1A]">
+        {service.name} Review (2026): Plans, Pricing & Channels
+      </h1>
+      <p class="text-base sm:text-lg text-[#5C5C5C] mt-3 max-w-3xl leading-relaxed">
+        Our independent breakdown of {service.name}. We analyze the channel lineup, evaluate streaming reliability, and test the cloud DVR to help you decide if it is worth ${service.monthlyPrice.toFixed(2)}/month.
+      </p>
+    </div>
+
+    <AuthorByline authorId="editorial-team" />
+    <AffiliateDisclosure />
+
+    <!-- Top Verdict Box -->
+    <VerdictBox service={service} />
+
+    <!-- Pros & Cons -->
+    <ProsCons pros={service.pros} cons={service.cons} serviceName={service.name} />
+
+    <!-- Price & Plan Breakdown Table -->
+    <section class="my-10 bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A] mb-4">
+        {service.name} Pricing & Plan Specifications
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <tbody class="divide-y divide-[#E7E2DA]">
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C] w-1/3">Plan this price refers to</th>
+              <td class="py-3 text-[#1A1A1A]">{service.planName}</td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Standard Monthly Rate</th>
+              <td class="py-3 font-editorial text-base font-bold text-[#1A1A1A] tabular-nums">
+                {formatUsd(service.monthlyPrice)} / month
+              </td>
+            </tr>
+            {requiredFees.map((fee) => (
+              <tr>
+                <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">{fee.label}</th>
+                <td class="py-3 text-[#1A1A1A] tabular-nums">
+                  {fee.amount != null ? `+ ${formatUsd(fee.amount)} / month` : 'Varies'}
+                  <span class="block text-[11px] text-[#5C5C5C] font-normal">{fee.note}</span>
+                </td>
+              </tr>
+            ))}
+            {optionalFees.map((fee) => (
+              <tr>
+                <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Optional: {fee.label}</th>
+                <td class="py-3 text-[#1A1A1A] tabular-nums">
+                  {fee.amount != null ? `+ ${formatUsd(fee.amount)} / month` : 'Varies'}
+                  <span class="block text-[11px] text-[#5C5C5C] font-normal">{fee.note}</span>
+                </td>
+              </tr>
+            ))}
+            {promoLine && (
+              <tr class="bg-amber-50/30">
+                <th class="py-3 pr-4 font-semibold text-[#C2410C]">Introductory Promotion (temporary)</th>
+                <td class="py-3 font-semibold text-[#C2410C] tabular-nums">
+                  {promoLine}, then {formatUsd(service.monthlyPrice)} / month
+                </td>
+              </tr>
+            )}
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Price last checked on provider site</th>
+              <td class="py-3 text-[#1A1A1A]">
+                {formatVerifiedDate(service.priceVerifiedAt)}
+                <a href={service.priceSourceUrl} target="_blank" rel="nofollow noopener" class="block text-[11px] text-[#0F5C4A] underline font-normal">Source: {new URL(service.priceSourceUrl).hostname}</a>
+                {service.priceVerifiedAt < dataMeta.newestVerified && (
+                  <span class="block text-[11px] text-amber-700 font-normal">Not re-checked since this date; treat as an estimate.</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Free Trial Duration</th>
+              <td class="py-3 text-[#1A1A1A]">
+                {service.freeTrialDays > 0 ? `${service.freeTrialDays} days` : 'No standard trial'}
+              </td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Simultaneous Screens</th>
+              <td class="py-3 text-[#1A1A1A] tabular-nums">{service.simultaneousStreams} screens</td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Cloud DVR Storage</th>
+              <td class="py-3 text-[#1A1A1A]">{service.dvrStorage}</td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">4K HDR Capabilities</th>
+              <td class="py-3 text-[#1A1A1A]">
+                {service.supports4K
+                  ? 'Supported on select broadcasts'
+                  : fourKLabel(service) === 'Add-on only'
+                    ? '1080p / 720p on the listed plan; 4K requires the add-on above'
+                    : '1080p / 720p maximum'}
+              </td>
+            </tr>
+            <tr>
+              <th class="py-3 pr-4 font-semibold text-[#5C5C5C]">Contract & Equipment</th>
+              <td class="py-3 text-[#1A1A1A]">Zero contract, month-to-month billing, bring your own device</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <DataNotice kind="prices" variant="footnote" class="mt-3" />
+    </section>
+
+    <!-- Ad slot placeholder -->
+    <AdSlot slotId="service-middle" format="leaderboard" />
+
+    <!-- Channel Lineup Grouped by Category -->
+    <section class="my-10">
+      <div class="flex items-baseline justify-between mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#0F5C4A]">
+            Carriage Among Channels We Track
+          </span>
+          <h2 class="font-editorial text-2xl font-bold text-[#1A1A1A]">
+            Key Channels Tracked on {service.name}: {getTrackedShort(service)}
+          </h2>
+        </div>
+        <a
+          href="/channels/"
+          class="text-xs font-semibold text-[#0F5C4A] hover:underline"
+        >
+          Browse all channels &rarr;
+        </a>
+      </div>
+
+      <div class="space-y-6">
+        {categories.map((cat) => {
+          const catChannels = carriedChannels.filter((ch) => ch.category === cat.key);
+          if (catChannels.length === 0) return null;
+
+          return (
+            <div class="bg-white border border-[#E7E2DA] rounded p-5">
+              <h3 class="font-editorial text-lg font-bold text-[#1A1A1A] mb-3 flex items-center justify-between">
+                <span>{cat.label}</span>
+                <span class="text-xs text-[#5C5C5C] font-normal">
+                  {catChannels.length} channels
+                </span>
+              </h3>
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+                {catChannels.map((ch) => {
+                  const requirement = getCarriage(ch, service)?.requirement ?? null;
+                  return (
+                    <a
+                      href={`/channels/${ch.slug}/`}
+                      class="p-2.5 rounded border border-[#E7E2DA] hover:border-[#0F5C4A] bg-[#FAF8F5] text-xs font-medium text-[#1A1A1A] hover:text-[#0F5C4A] flex items-center justify-between gap-1 transition-colors"
+                    >
+                      <span class="min-w-0">
+                        <span class="block truncate">{ch.name}</span>
+                        {requirement && (
+                          <span class="block text-[10px] font-semibold text-amber-700 leading-tight">{requirement}</span>
+                        )}
+                      </span>
+                      {requirement ? (
+                        <span class="text-amber-700 font-bold shrink-0" title={requirement}>+</span>
+                      ) : (
+                        <span class="text-emerald-700 font-bold shrink-0" title="Included in the listed plan">✓</span>
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <DataNotice kind="channels" variant="footnote" class="mt-3" />
+    </section>
+
+    <!-- Supported Devices -->
+    <section class="my-10 bg-white border border-[#E7E2DA] rounded p-6">
+      <h2 class="font-editorial text-xl font-bold text-[#1A1A1A] mb-3">
+        Supported Devices for {service.name}
+      </h2>
+      <p class="text-xs text-[#5C5C5C] mb-4">
+        You can stream {service.name} across all major connected TVs and mobile devices without proprietary hardware:
+      </p>
+      <div class="flex flex-wrap gap-2 text-xs">
+        {service.supportedDevices.map((dev) => (
+          <a
+            href={`/devices/${dev}/`}
+            class="px-3 py-1.5 bg-[#FAF8F5] border border-[#E7E2DA] hover:border-[#0F5C4A] rounded text-[#1A1A1A] font-medium transition-colors"
+          >
+            {dev.replace('-', ' ').toUpperCase()} &rarr;
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <FAQ items={serviceFaqs} title={`Frequently Asked Questions About ${service.name}`} />
+
+    <!-- Alternative Services -->
+    <RelatedLinks
+      title={`Compare ${service.name} With Alternatives`}
+      links={alternatives.map((alt) => ({
+        title: `${service.name} vs. ${alt.name}`,
+        url: `/compare/${service.slug}-vs-${alt.slug}/`,
+        description: `Compare channels, pricing ($${service.monthlyPrice.toFixed(0)} vs $${alt.monthlyPrice.toFixed(0)}), and cloud DVR.`,
+        badge: `From $${alt.monthlyPrice.toFixed(0)}/mo`
+      }))}
+      hubUrl="/compare/"
+      hubLabel="All comparisons &rarr;"
+    />
+  </div>
+
+  <!-- Mobile Sticky Bottom CTA Bar (Only visible < 768px on review pages) -->
+  <MobileStickyCTA
+    serviceName={service.name}
+    shortName={service.shortName}
+    monthlyPrice={service.monthlyPrice}
+    planName={service.planName}
+    sourceUrl={service.priceSourceUrl}
+    promoPrice={service.promoPrice}
+    promoDescription={service.promoDescription}
+    ctaUrl={service.priceSourceUrl}
+  />
+</BaseLayout>

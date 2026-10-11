@@ -1,0 +1,108 @@
+---
+import type { StreamingService } from '../types';
+import Button from './Button.astro';
+import Price from './Price.astro';
+import { fourKLabel, getTrackedShort } from '../lib/coverage';
+
+interface Props {
+  service: StreamingService;
+  isRankOne?: boolean;
+}
+
+const { service, isRankOne = false } = Astro.props;
+const buttonLabel = `Get ${service.shortName || service.name}`;
+---
+
+<div
+  class={`bg-white border rounded-[6px] p-4 flex flex-col gap-3 min-w-0 w-full ${
+    isRankOne ? 'border-[#C2410C] shadow-2xs' : 'border-[#E7E2DA]'
+  }`}
+>
+  <!-- Row 1: Service Name (serif, 20px) on left, rating on right on one line -->
+  <div class="flex items-center justify-between gap-2 min-w-0">
+    <div class="flex items-center gap-2 min-w-0">
+      <a
+        href={`/services/${service.slug}/`}
+        class="font-editorial text-[20px] font-bold text-[#1A1A1A] hover:text-[#0F5C4A] hover:underline min-w-0 break-words leading-tight"
+      >
+        {service.name}
+      </a>
+      {isRankOne && (
+        <span class="text-[10px] font-bold uppercase tracking-wider text-[#C2410C] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded shrink-0">
+          Top pick
+        </span>
+      )}
+    </div>
+    <div class="shrink-0 flex items-center gap-1 text-sm font-semibold text-[#0F5C4A] tabular-nums">
+      <span>★</span>
+      <span>{service.editorialRating.toFixed(1)}</span>
+    </div>
+  </div>
+
+  <!-- Row 2: bestFor tagline in full, no truncation, no line-clamp -->
+  <p class="text-xs text-[#5C5C5C] leading-relaxed [overflow-wrap:anywhere] min-w-0">
+    {service.bestFor}
+  </p>
+
+  <!-- Row 3: main monthly price, then plan, fees and promo as secondary lines -->
+  <Price service={service} size="md" showPlan={true} />
+
+  <!-- Row 4: 2-column spec grid (grid-cols-2, gap 12px) with label above value -->
+  <div class="grid grid-cols-2 gap-3 pt-2 pb-1 border-t border-stone-100 text-xs">
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">Key channels tracked</span>
+      <span class="font-semibold text-[#1A1A1A] tabular-nums [overflow-wrap:anywhere]">
+        {getTrackedShort(service)}
+      </span>
+    </div>
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">Cloud DVR</span>
+      <span class="font-semibold text-[#1A1A1A] [overflow-wrap:anywhere]">
+        {service.dvrStorage}
+      </span>
+    </div>
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">Streams</span>
+      <span class="font-semibold text-[#1A1A1A] tabular-nums [overflow-wrap:anywhere]">
+        {service.simultaneousStreams} screens
+      </span>
+    </div>
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">Free Trial</span>
+      <span class="font-semibold text-[#1A1A1A] [overflow-wrap:anywhere]">
+        {service.freeTrialDays > 0 ? `${service.freeTrialDays} Days Free` : '–'}
+      </span>
+    </div>
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">4K Live</span>
+      <span class="font-semibold text-[#1A1A1A] [overflow-wrap:anywhere]">
+        {service.supports4K ? '✓ Yes' : fourKLabel(service)}
+      </span>
+    </div>
+    <div class="min-w-0">
+      <span class="block text-[10px] uppercase tracking-wider text-stone-400">Contract</span>
+      <span class="font-semibold text-[#1A1A1A] [overflow-wrap:anywhere]">
+        {service.contractRequired ? '12-24 mo' : 'None (Cancel anytime)'}
+      </span>
+    </div>
+  </div>
+
+  <!-- Row 5: full-width primary "Get {shortName}" button (48px), then centered "Read review" text link -->
+  <div class="flex flex-col items-center gap-2 pt-2 border-t border-stone-100 w-full min-w-0">
+    <Button
+      href={service.priceSourceUrl}
+      variant={isRankOne ? 'highlight' : 'primary'}
+      size="md"
+      fullWidth={true}
+      ariaLabel={`Get ${service.shortName || service.name}`}
+    >
+      <span>{buttonLabel}</span>
+    </Button>
+    <a
+      href={`/services/${service.slug}/`}
+      class="btn-link text-xs py-1 text-center justify-center"
+    >
+      Read review
+    </a>
+  </div>
+</div>
