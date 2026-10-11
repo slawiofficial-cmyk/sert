@@ -16,6 +16,14 @@ const { title, description, canonical, jsonLd } = Astro.props;
 <!doctype html>
 <html lang="en-US" class="bg-[#FAF8F5] text-[#1A1A1A] antialiased">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-3QYBZ63SJX"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3QYBZ63SJX');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light" />
